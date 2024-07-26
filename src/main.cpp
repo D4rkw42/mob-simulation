@@ -1,5 +1,5 @@
 #include <SDL2/SDL.h>
-#undef main
+#define SDL_MAIN_HANDLED
 
 int main(int argc, char* argv[]) {
    SDL_Window* window = NULL;

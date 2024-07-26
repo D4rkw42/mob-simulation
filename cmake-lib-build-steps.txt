@@ -1,0 +1,4 @@
+install source (complete)
+cmake .. -G "NMake Files" -DCMAKE_BUILD_TYPE=Release
+cmake --build .
+cmake -- install .
