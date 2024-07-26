@@ -22,6 +22,7 @@ add_executable(
     src/main.cpp
     src/global.cpp
     src/application.cpp
+    src/event-handler.cpp
     
     src/utils/exception.cpp
 

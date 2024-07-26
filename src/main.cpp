@@ -5,6 +5,7 @@
 
 #include "global.hpp"
 #include "application.hpp"
+#include "event-handler.hpp"
 
 #include "utils/exception.hpp"
 
@@ -26,6 +27,7 @@ int main(int argc, char* argv[]) {
 
     while (!SDL_QuitRequested()) {
         SDL_PollEvent(&event);
+        handleEvents(event);
 
         // renderização e atualização
         app::update();
