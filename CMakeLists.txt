@@ -12,12 +12,21 @@ set(CMAKE_CXX_STANDARD 17)
 find_package(SDL2 CONFIG REQUIRED)
 find_package(SDL2_image CONFIG REQUIRED)
 
-include_directories(${SDL2_INCLUDE_DIRS})
+include_directories(
+    "${CMAKE_CURRENT_SOURCE_DIR}/src"
+    ${SDL2_INCLUDE_DIRS})
 
 add_executable(
     mob-simulation
+
+    src/main.cpp
+    src/global.cpp
+    src/application.cpp
     
-    src/main.cpp)
+    src/utils/exception.cpp
+
+    src/sdl2/config.cpp
+    src/sdl2/graphics/window.cpp)
 
 target_link_libraries(
     mob-simulation
