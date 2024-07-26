@@ -7,7 +7,7 @@
 // eventos separador por tipo
 
 void eventMouseClick(SDL_Event event) {
-
+    
 }
 
 void eventMouseMove(SDL_Event event) {
