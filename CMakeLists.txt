@@ -7,4 +7,11 @@ project(
     HOMEPAGE_URL "https://github.com/D4rkw42/mob-simulation"
     LANGUAGES CXX)
 
-add_executable(mob-simulation main.cpp)
+list(APPEND CMAKE_PREFIX_PATH "${CMAKE_ROOT}/Modules/SDL2")
+find_package(SDL2 CONFIG REQUIRED)
+
+include_directories(${SDL2_INCLUDE_DIRS})
+# include_directories("${CMAKE_ROOT}/Modules/SDL2/include")
+
+add_executable(mob-simulation src/main.cpp)
+target_link_libraries(mob-simulation ${SDL2_LIBRARIES})
