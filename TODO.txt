@@ -1,0 +1,15 @@
+TODO LIST TO FINAL PROJECT (DUE TO 31/12)
+
+- Animation sys []
+- Basic Entity and First Entity []
+- Camera []
+- Entity State System []
+- Path Finder Algorithm A* (customized) []
+- Add other entities and first predatory interactions []
+- Player addiction []
+- Scenario with Procedural Flora and Terrain -> like water (not swimable and traversable), sand, grass []
+- Collision with objects and non-traversable path []
+- Item System and Inventory []
+- Data Saving []
+- Audio Effects []
+- Add Custom Configurations .json file -> to add ?? []
