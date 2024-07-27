@@ -1,6 +1,6 @@
 TODO LIST TO FINAL PROJECT (DUE TO 31/12)
 
-- Animation sys []
+- Animation sys [x]
 - Basic Entity and First Entity []
 - Camera []
 - Entity State System []

@@ -10,6 +10,6 @@ namespace app {
     void ApplicationQuit(void);
 
     // funcionamento geral da aplicação
-    void update(void);
+    void update(int elapsedTime);
     void render(void);
 }

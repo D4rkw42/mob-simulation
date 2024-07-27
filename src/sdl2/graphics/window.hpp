@@ -16,12 +16,13 @@ const unsigned short WINDOW_HEIGHT = 400;
 // definição geral de janela
 class Window {
     public:
+        SDL_Renderer* renderer;
+        
         Window(std::string name);
         ~Window();
 
     private:
         SDL_Window* window;
-        SDL_Renderer* renderer;
 };
 
 // criação dinâmica de janelas

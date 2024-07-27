@@ -1,2 +1,7 @@
+# directories
 .vscode
 /build
+
+# files
+.dll
+.exe

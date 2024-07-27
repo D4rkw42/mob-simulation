@@ -58,11 +58,11 @@ int main(int argc, char* argv[]) {
         last_epoch = curr_epoch;
 
         // renderização e atualização
-        app::update();
+        app::update(elapsedTime);
 
         frame_rate_count += elapsedTime;
-        
-        if (frame_rate_count >= 1000.f / FRAME_RATE) {
+
+        if (frame_rate_count >= 1000 / FRAME_RATE) {
             frame_rate_count = 0;
             app::render();
 

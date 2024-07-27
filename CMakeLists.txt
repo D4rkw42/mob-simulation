@@ -25,6 +25,7 @@ add_executable(
     src/event-handler.cpp
     
     src/utils/exception.cpp
+    src/utils/animation.cpp
 
     src/sdl2/config.cpp
     src/sdl2/graphics/window.cpp)
