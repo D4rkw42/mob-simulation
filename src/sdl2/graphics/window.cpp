@@ -35,6 +35,15 @@ Window::~Window() {
     SDL_DestroyWindow(this->window);
 }
 
+void Window::render(void) {
+    SDL_RenderPresent(this->renderer);
+}
+
+void Window::clear(void) {
+    SDL_SetRenderDrawColor(this->renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
+    SDL_RenderClear(this->renderer);
+}
+
 //
 
 std::shared_ptr<Window> createWindow(std::string name) {

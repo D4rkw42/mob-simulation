@@ -13,3 +13,4 @@ TODO LIST TO FINAL PROJECT (DUE TO 31/12)
 - Data Saving []
 - Audio Effects []
 - Add Custom Configurations .json file -> to add ?? []
+- Add Translation sys ?? []

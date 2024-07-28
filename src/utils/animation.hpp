@@ -12,9 +12,9 @@
 
 // informações básicas para animação
 struct AnimationInfo {
-    unsigned short width, height;
-    unsigned short n_sprites;
-    unsigned short duration;
+    int width, height;
+    int n_sprites;
+    int duration;
     bool repeat;
 };
 
@@ -23,10 +23,12 @@ struct AnimationInfo {
 class Animation {
     public:
         // carrega dados para uma nova animação
-        void set(std::string path, AnimationInfo info);
+        void set(std::string file, AnimationInfo info);
 
         void render(std::shared_ptr<Window> window, int x, int y, double scale = 1.f); // renderiza a animação na tela selecionada
         void load(int elapsedTime); // atualiza a animação
+
+        void flip(bool flip); // se a imagem deve ser flippada
 
         Animation(void);
         ~Animation();
@@ -34,6 +36,7 @@ class Animation {
     private:
         AnimationInfo info; // informações de animação
         SDL_Surface* surface;
-        unsigned short sprite; // sprite atual
+        int sprite; // sprite atual
+        bool flipped; // se deve estar rotacionado
         int count;
 };

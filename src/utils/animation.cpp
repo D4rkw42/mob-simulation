@@ -4,20 +4,20 @@
 
 #include "animation.hpp"
 
-#include <cstdlib>
 #include <SDL2/SDL_image.h>
+#include <iostream>
 
-Animation::Animation(void) : surface(nullptr) {};
+Animation::Animation(void) : surface(nullptr), flipped(false) {};
 Animation::~Animation() {
     SDL_FreeSurface(this->surface);
 }
 
-void Animation::set(std::string path, AnimationInfo info) {
+void Animation::set(std::string file, AnimationInfo info) {
     if (this->surface != nullptr) {
         SDL_FreeSurface(this->surface);
     }
 
-    this->surface = IMG_Load(path.c_str());
+    this->surface = IMG_Load(file.c_str());
     this->info = info;
     this->sprite = 0;
     this->count = 0;
@@ -32,8 +32,8 @@ void Animation::load(int elapsedTime) {
         this->sprite++;
 
         // alcaçando o máximo de sprites
-        if (this->sprite == this->info.n_sprites - 1) {
-            this->sprite = this->info.repeat? 0 : this->info.n_sprites - 1;
+        if (this->sprite == this->info.n_sprites) {
+            this->sprite = this->info.repeat? 0 : this->info.n_sprites;
         }
     }
 }
@@ -54,6 +54,12 @@ void Animation::render(std::shared_ptr<Window> window, int x, int y, double scal
     rect_split.w = this->info.width;
     rect_split.h = this->info.height;
 
-    SDL_RenderCopy(window->renderer, texture, &rect_split, &rect_pos);
+    SDL_RenderCopyEx(window->renderer, texture, &rect_split, &rect_pos, 0, nullptr, this->flipped? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
     SDL_DestroyTexture(texture);
+}
+
+//
+
+void Animation::flip(bool flip) {
+    this->flipped = flip;
 }

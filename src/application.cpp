@@ -8,31 +8,46 @@
 
 #include "sdl2/graphics/window.hpp"
 
-#include "utils/animation.hpp"
-#include <SDL2/SDL.h>
-
-#include <iostream>
-
-Animation animation;
+#include "entity/mobs/mobs.hpp"
+#include "utils/handle-mobs.hpp"
 
 // configurações iniciais e quit
 void app::ApplicationConfigure(void) {
     window = createWindow(APPLICATION_NAME);
-    AnimationInfo info = {64, 32, 5, 600, true};
-    animation.set("assets/sprites/entity/wolf/walking.png", info);
+
+    // world inicialization
+
+    // colocando todos os objetos de mob_list para nullptr
+    mob_list.fill(nullptr);
+
+    spawnNewMob<Wolf>(mob_list, WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2);
 }
 
 void app::ApplicationQuit(void) {
-
+    
 }
 
 // funcionamento geral da aplicação
 void app::update(int elapsedTime) {
-    animation.load(elapsedTime);
+    // atualizando todos os mobs
+    for (auto mob : mob_list) {
+        if (mob != nullptr) {
+            mob->update(elapsedTime);
+        }
+    }
 }
 
 void app::render(void) {
-    SDL_RenderClear(window->renderer);
-    animation.render(window, WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2, 4);
-    SDL_RenderPresent(window->renderer);
+    window->clear();
+
+    // rendering field
+
+    // renderizando todos os mobs
+    for (auto mob : mob_list) {
+        if (mob != nullptr) {
+            mob->render(window);
+        }
+    }
+
+    window->render();
 }

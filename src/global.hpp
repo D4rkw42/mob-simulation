@@ -5,13 +5,17 @@
 #pragma once
 
 #include <memory>
+#include <array>
+
+#include "config.hpp"
+
+#include "entity/entity.hpp"
+#include "entity/mobs/mobs.hpp"
 
 #include "sdl2/graphics/window.hpp"
 
-// configuração
-extern const char* APPLICATION_NAME;
-
-extern const unsigned short FRAME_RATE;
-
-// definições gerais
+// declarações gerais
 extern std::shared_ptr<Window> window;
+
+// world variables
+extern std::array<std::shared_ptr<Entity>, MAX_MOBS_SPAWNED> mob_list;

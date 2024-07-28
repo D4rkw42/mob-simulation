@@ -1,0 +1,13 @@
+{
+    "wolf": {
+        "type": "wolf",
+        "width": 64, "height": 32,
+        "data": {},
+        "animations": {
+            "idle": {"spritesheet": "wolf/idle.png", "n_sprites": 2, "duration": 1000, "repeat": true},
+            "walking": {"spritesheet": "wolf/walking.png", "n_sprites": 5, "duration": 1000, "repeat": true},
+            "running": {"spritesheet": "wolf/chasing.png", "n_sprites": 5, "duration": 1000, "repeat": true},
+            "attacking": {"spritesheet": "wolf/attacking.png", "n_sprites": 5, "duration": 1000, "repeat": false}
+        }
+    }
+}

@@ -21,6 +21,9 @@ class Window {
         Window(std::string name);
         ~Window();
 
+        void render(void); // renderiza os gráficos
+        void clear(void); // limpa a janela
+
     private:
         SDL_Window* window;
 };

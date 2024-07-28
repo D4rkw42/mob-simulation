@@ -5,6 +5,7 @@
 #include <SDL2/SDL.h>
 
 #include "global.hpp"
+#include "config.hpp"
 #include "application.hpp"
 #include "event-handler.hpp"
 
@@ -78,6 +79,9 @@ int main(int argc, char* argv[]) {
             fps_count_time = 0;
             last_fps = 0;
         }
+
+        // for convenience
+        SDL_Delay(1);
     }
 
     app::ApplicationQuit();
