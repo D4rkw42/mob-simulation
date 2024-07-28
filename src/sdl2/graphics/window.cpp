@@ -44,6 +44,10 @@ void Window::clear(void) {
     SDL_RenderClear(this->renderer);
 }
 
+void Window::getDimensions(int& width, int& height) {
+    SDL_GetWindowSize(this->window, &width, &height);
+}
+
 //
 
 std::shared_ptr<Window> createWindow(std::string name) {

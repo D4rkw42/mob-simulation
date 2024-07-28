@@ -24,6 +24,9 @@ class Window {
         void render(void); // renderiza os gráficos
         void clear(void); // limpa a janela
 
+        // dimensões da janela
+        void getDimensions(int& width, int& height);
+
     private:
         SDL_Window* window;
 };

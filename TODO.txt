@@ -1,7 +1,7 @@
 TODO LIST TO FINAL PROJECT (DUE TO 31/12)
 
 - Animation sys [x]
-- Basic Entity and First Entity []
+- Basic Entity and First Entity [x]
 - Camera []
 - Entity State System []
 - Path Finder Algorithm A* (customized) []

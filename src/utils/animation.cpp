@@ -38,15 +38,24 @@ void Animation::load(int elapsedTime) {
     }
 }
 
-void Animation::render(std::shared_ptr<Window> window, int x, int y, double scale) {
+void Animation::render(std::shared_ptr<Window> window, std::shared_ptr<Camera> camera, int x, int y, double scale) {
     SDL_Texture* texture = SDL_CreateTextureFromSurface(window->renderer, this->surface);
     SDL_Rect rect_pos, rect_split; // retangulo para posicionamento e para ajuste
 
+    double pos_x, pos_y, _width, _height;
+
+    // calculando posição na tela
+    camera->viewport(window, ObjectInfo {
+        static_cast<double>(this->info.width),
+        static_cast<double>(this->info.height),
+        static_cast<double>(x), static_cast<double>(y)
+    }, pos_x, pos_y, _width, _height);
+
     // posição
-    rect_pos.w = this->info.width * scale;
-    rect_pos.h = this->info.height * scale;
-    rect_pos.x = x - rect_pos.w / 2;
-    rect_pos.y = y - rect_pos.h / 2;
+    rect_pos.w = _width * scale;
+    rect_pos.h = _height * scale;
+    rect_pos.x = pos_x - rect_pos.w / 2;
+    rect_pos.y = pos_y - rect_pos.h / 2;
 
     // recorte
     rect_split.x = this->info.width * this->sprite;

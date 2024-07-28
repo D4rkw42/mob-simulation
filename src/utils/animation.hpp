@@ -9,6 +9,7 @@
 #include <string>
 
 #include "sdl2/graphics/window.hpp"
+#include "utils/camera.hpp"
 
 // informações básicas para animação
 struct AnimationInfo {
@@ -25,7 +26,7 @@ class Animation {
         // carrega dados para uma nova animação
         void set(std::string file, AnimationInfo info);
 
-        void render(std::shared_ptr<Window> window, int x, int y, double scale = 1.f); // renderiza a animação na tela selecionada
+        void render(std::shared_ptr<Window> window, std::shared_ptr<Camera> camera, int x, int y, double scale = 1.f); // renderiza a animação na tela selecionada
         void load(int elapsedTime); // atualiza a animação
 
         void flip(bool flip); // se a imagem deve ser flippada

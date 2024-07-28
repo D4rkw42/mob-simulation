@@ -9,33 +9,40 @@ project(
 
 set(CMAKE_CXX_STANDARD 17)
 
-find_package(SDL2 CONFIG REQUIRED)
-find_package(SDL2_image CONFIG REQUIRED)
-find_package(nlohmann_json CONFIG REQUIRED)
+# dependencies
+
+find_package(SDL2 CONFIG REQUIRED) # SDL.h library
+find_package(SDL2_image CONFIG REQUIRED) # SDL_image.h library
+find_package(nlohmann_json CONFIG REQUIRED) # nlohmann::json library
+
+# header definitions
 
 include_directories(
     "${CMAKE_CURRENT_SOURCE_DIR}/src"
     ${SDL2_INCLUDE_DIRS})
 
+# getting source files
+
+file(GLOB DIR_SRC "src/*.cpp")
+file(GLOB DIR_SRC_UTILS "src/utils/*.cpp")
+file(GLOB DIR_SRC_ENTITY "src/entity/*.cpp")
+file(GLOB DIR_SRC_ENTITY_MOBS "src/entity/mobs/*.cpp")
+file(GLOB DIR_SRC_SDL2 "src/sdl2/*.cpp")
+file(GLOB DIR_SRC_SDL2_GRAPHICS "src/sdl2/graphics/*.cpp")
+
+# building project
+
 add_executable(
     mob-simulation
 
-    src/main.cpp
-    src/global.cpp
-    src/config.cpp
-    src/application.cpp
-    src/event-handler.cpp
-    
-    src/utils/exception.cpp
-    src/utils/animation.cpp
-    src/utils/handle-mobs.cpp
+    ${DIR_SRC}
+    ${DIR_SRC_UTILS}
+    ${DIR_SRC_ENTITY}
+    ${DIR_SRC_ENTITY_MOBS}
+    ${DIR_SRC_SDL2}
+    ${DIR_SRC_SDL2_GRAPHICS})
 
-    src/entity/entity.cpp
-
-    src/entity/mobs/wolf.cpp
-
-    src/sdl2/config.cpp
-    src/sdl2/graphics/window.cpp)
+# linking external libraries
 
 target_link_libraries(
     mob-simulation PRIVATE

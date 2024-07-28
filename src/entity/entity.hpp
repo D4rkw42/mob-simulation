@@ -11,6 +11,7 @@
 #include <nlohmann/json.hpp>
 
 #include "utils/animation.hpp"
+#include "utils/camera.hpp"
 
 #include "sdl2/graphics/window.hpp"
 
@@ -33,6 +34,8 @@ extern const char* ENTITY_SPRITE_PATH; // sprites
 // classe básica para entidades
 class Entity {
     public:
+        double x, y, velX, velY;
+        
         Entity(ENTITY_TYPE type, EntityInfo info, int x, int y);
         virtual ~Entity() = default;
 
@@ -42,7 +45,7 @@ class Entity {
         // funções compartilhadas de operação
 
         virtual void update(int elapsedTime);
-        virtual void render(std::shared_ptr<Window> window);
+        virtual void render(std::shared_ptr<Window> window, std::shared_ptr<Camera> camera);
 
         void invalidate(void); // torna a entidade inválida
 
@@ -64,7 +67,6 @@ class Entity {
         bool isValid; // marca de uma entidade é válida ou não. Caso não seja, o sistema a apaga
 
         int width, height;
-        double x, y, velX, velY;
 
         nlohmann::json animation_info; // dados para animação
 
