@@ -33,7 +33,7 @@ void Animation::load(int elapsedTime) {
 
         // alcaçando o máximo de sprites
         if (this->sprite == this->info.n_sprites) {
-            this->sprite = this->info.repeat? 0 : this->info.n_sprites;
+            this->sprite = this->info.repeat? 0 : this->info.n_sprites - 1;
         }
     }
 }

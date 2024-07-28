@@ -9,7 +9,7 @@ double MAX_ZOOM = 3.f; // zoom máximo permitido
 double MIN_ZOOM = 0.1f; // zoom mínimo permitido
 double ZOOM_INITIAL = 1.f; // zoom inicial
 
-double ZOOM_MOD = 0.05f; // alteração do zoom
+double ZOOM_MOD = 0.08f; // alteração do zoom
 
 // classe básica
 Camera::Camera(int x, int y) : x(x), y(y), zoom(1.f) {}
