@@ -4,8 +4,8 @@
 
 #pragma once
 
-#include "entity/entity.hpp"
-#include "utils/camera.hpp"
+#include "world/entity/entity.hpp"
+#include "utils/world/camera.hpp"
 
 class Wolf : public Entity {
     public:

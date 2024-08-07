@@ -5,13 +5,14 @@
 #include <SDL2/SDL.h>
 
 #include "global.hpp"
-#include "config.hpp"
-#include "application.hpp"
-#include "event-handler.hpp"
+
+#include "config/config.hpp"
+#include "config/sdl2/sdl-config.hpp"
+
+#include "app/application.hpp"
+#include "app/event-handler.hpp"
 
 #include "utils/exception.hpp"
-
-#include "sdl2/config.hpp"
 
 using namespace std::chrono;
 

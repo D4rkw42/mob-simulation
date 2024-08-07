@@ -2,7 +2,7 @@
     Configurações iniciais do SDL2 Library
 */
 
-#include "config.hpp"
+#include "sdl-config.hpp"
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>

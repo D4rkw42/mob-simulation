@@ -9,4 +9,7 @@ const char* APPLICATION_NAME = "Mob Simulation";
 
 const unsigned short FRAME_RATE = 60;
 
+const siv::PerlinNoise::seed_type seed = 123456u;
+
 // world definitions
+const char* WORLD_CONFIG_FILE = "assets/world.json"; // arquivo de configuração do mundo

@@ -10,10 +10,10 @@
 
 #include <nlohmann/json.hpp>
 
-#include "utils/animation.hpp"
-#include "utils/camera.hpp"
+#include "config/sdl2/graphics/window.hpp"
 
-#include "sdl2/graphics/window.hpp"
+#include "utils/render/animation.hpp"
+#include "utils/world/camera.hpp"
 
 // info para as informações carregadas
 typedef nlohmann::json EntityInfo;

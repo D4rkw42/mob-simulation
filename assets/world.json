@@ -1,0 +1,20 @@
+{
+    "biomes": {
+        "list": ["forest"],
+
+        "forest": {
+            "factor": 900,
+            "random-factor": 96183433,
+            "tiles": ["grass", "dirt"],
+
+            "grass": {
+                "factor": 900,
+                "variations": [1, 2, 3]
+            },
+            "dirt": {
+                "factor": 300,
+                "variations": [1, 2, 3, 4]
+            }
+        }
+    }
+}

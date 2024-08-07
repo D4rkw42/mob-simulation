@@ -6,8 +6,8 @@
 
 #include <array>
 
-#include "config.hpp"
-#include "entity/entity.hpp"
+#include "config/config.hpp"
+#include "world/entity/entity.hpp"
 
 // criação dinâmica de mobs
 template <class MobType>

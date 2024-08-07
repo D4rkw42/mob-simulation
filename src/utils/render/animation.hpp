@@ -8,8 +8,8 @@
 #include <memory>
 #include <string>
 
-#include "sdl2/graphics/window.hpp"
-#include "utils/camera.hpp"
+#include "config/sdl2/graphics/window.hpp"
+#include "utils/world/camera.hpp"
 
 // informações básicas para animação
 struct AnimationInfo {

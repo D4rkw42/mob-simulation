@@ -7,12 +7,12 @@
 // definições
 double MAX_ZOOM = 3.f; // zoom máximo permitido
 double MIN_ZOOM = 0.1f; // zoom mínimo permitido
-double ZOOM_INITIAL = 1.f; // zoom inicial
+double ZOOM_INITIAL = 0.8f; // zoom inicial
 
 double ZOOM_MOD = 0.08f; // alteração do zoom
 
 // classe básica
-Camera::Camera(int x, int y) : x(x), y(y), zoom(1.f) {}
+Camera::Camera(int x, int y) : x(x), y(y), zoom(ZOOM_INITIAL) {}
 
 // cálculo de coordenadas
 void Camera::viewport(std::shared_ptr<Window> window, ObjectInfo info, double& x, double& y, double& width, double& height) {
@@ -55,6 +55,8 @@ void Camera::zoom_out(void) {
     }
 }
 
+//
+
 void Camera::updateCameraPosition(Mouse mouse) {
     static int last_cam_x = this->x;
     static int last_cam_y = this->y;
@@ -69,4 +71,18 @@ void Camera::updateCameraPosition(Mouse mouse) {
         last_cam_x = this->x;
         last_cam_y = this->y;
     }
+}
+
+// funções auxiliares
+
+// obtém o quanto do mundo a câmera está capturando (com acréscimo de 10%)
+void Camera::getRenderDistance(std::shared_ptr<Window> window, double& dist_horiz, double& dist_vert) {
+    int w_width, w_height;
+
+    // obtendo dimensões da janela
+    window->getDimensions(w_width, w_height);
+
+    // calculando distância observada (top-bottom, left-right)
+    dist_horiz = 1.1f * (w_width * (1.f / this->zoom));
+    dist_vert = 1.1f * (w_height * (1.f / this->zoom));
 }

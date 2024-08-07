@@ -6,8 +6,8 @@
 
 #include <memory>
 
-#include "sdl2/graphics/window.hpp"
-#include "utils/mouse.hpp"
+#include "config/sdl2/graphics/window.hpp"
+#include "utils/events/mouse.hpp"
 
 // definições
 extern double MAX_ZOOM; // zoom máximo permitido
@@ -24,6 +24,7 @@ struct ObjectInfo {
 // classe básica
 class Camera {
     public:
+        double x, y;
         Camera(int x, int y);
 
         // cálculo de coordenadas
@@ -35,7 +36,11 @@ class Camera {
 
         void updateCameraPosition(Mouse mouse); // move a câmera de lugar
 
+        // funções auxiliares
+
+        // obtém o quanto do mundo a câmera está capturando (com acréscimo de 10%)
+        void getRenderDistance(std::shared_ptr<Window> window, double& dist_horiz, double& dist_vert);
+
     private:
         double zoom;
-        double x, y;
 };
