@@ -17,9 +17,9 @@ using json = nlohmann::json;
 const unsigned int TILE_SIZE = 30; // tamanho real de cada tile no mundo
 
 // configuração de geração
-const double GEN_DETAILS = 8.f; // nível de detalhes do mundo
-const double GEN_AMPLITUDE = 0.2f; // variação dos valores
-const double GEN_MOD = 0.1f; // o quando cada mudança de bloco irá impactar no mundo
+const double GEN_DETAILS = 3.f; // nível de detalhes do mundo
+const double GEN_AMPLITUDE = 1.4f; // variação dos valores
+const double GEN_MOD = 0.06f; // o quando cada mudança de bloco irá impactar no mundo
 
 // auxilia no sorteio do bioma
 struct BiomeInfo {
@@ -126,7 +126,7 @@ void generateTerrain(std::shared_ptr<Window> window, std::shared_ptr<Camera> cam
             }
 
 
-            // descobrindo qual bioma foi selecionado para o esquema
+            // descobrindo qual tile foi selecionado para o esquema
             int tile_selected = 0;
             int t_factor = 1000;
 
@@ -137,10 +137,18 @@ void generateTerrain(std::shared_ptr<Window> window, std::shared_ptr<Camera> cam
                 }
             }
 
-            // a incluir: variação!!!! Por enquanto, sempre 1
+            // computando variação de blocos
+            
+            int n_variations = tiles[tile_selected].variations.size();
+            int variation_selected = trunc(perlin_n * n_variations) - 1;
+
+            // proteção
+            if (variation_selected < 0) {
+                variation_selected = 0;
+            }
 
             // alocando o tile na memória
-            std::shared_ptr<Tile> m_tile = std::make_shared<Tile>(tiles[tile_selected].name, biomes[biome_selected].name, 1, x, y, TILE_SIZE + 2);
+            std::shared_ptr<Tile> m_tile = std::make_shared<Tile>(tiles[tile_selected].name, biomes[biome_selected].name, tiles[tile_selected].variations[variation_selected], x, y, TILE_SIZE + 2);
 
             _tiles[id++] = m_tile;
         }

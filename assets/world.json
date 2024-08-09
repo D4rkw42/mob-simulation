@@ -4,15 +4,19 @@
 
         "forest": {
             "factor": 1000,
-            "tiles": ["grass", "dirt"],
+            "tiles": ["grass", "dirt", "stone"],
 
             "grass": {
                 "factor": 1000,
-                "variations": [1, 2, 3]
+                "variations": [1, 1, 1, 2, 2]
             },
             "dirt": {
-                "factor": 200,
-                "variations": [1, 2, 3, 4]
+                "factor": 300,
+                "variations": [1]
+            },
+            "stone": {
+                "factor": 100,
+                "variations": [1]
             }
         }
     }
