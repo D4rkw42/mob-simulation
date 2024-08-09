@@ -21,9 +21,8 @@ void app::ApplicationConfigure(void) {
     // world inicialization
     camera = std::make_shared<Camera>(0, 0);
 
-    // colocando todos os tiles do terreno para nullptr e pré-geração
-    tiles.fill(nullptr);
-    // generateTerrain(window, camera, tiles);
+    // pré-geração de mundo
+    generateTerrain(window, camera, tiles); // terreno
 
     // colocando todos os objetos de mob_list para nullptr
     mob_list.fill(nullptr);
@@ -45,14 +44,15 @@ void app::update(int elapsedTime) {
     // atualizando definições de controle
     camera->updateCameraPosition(mouse);
 
-    // static int count = 0;
-    // count += elapsedTime;
+    // geração de terreno
+    static int gen_count = 0;
+    gen_count += elapsedTime;
 
-    // gerando terreno a cada 10 segundos (teste)
-    // if (count >= 20000) {
-    //    count = 0;
-    //    generateTerrain(window, camera, tiles);
-    // }
+    // gera novo terreno a cada 1,5 s
+    if (gen_count > 300) {
+        generateTerrain(window, camera, tiles);
+        gen_count = 0;
+    }
 
     // atualizando todos os mobs
     for (auto mob : mob_list) {
@@ -69,7 +69,7 @@ void app::render(void) {
     RenderData render_data {window, imageCollection};
 
     // renderizando terreno
-    // renderTerrain(window, camera, tiles);
+    renderTerrain(render_data, camera, tiles);
 
     // renderizando todos os mobs
     for (auto mob : mob_list) {

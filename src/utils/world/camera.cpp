@@ -6,7 +6,7 @@
 
 // definições
 double MAX_ZOOM = 3.f; // zoom máximo permitido
-double MIN_ZOOM = 0.1f; // zoom mínimo permitido
+double MIN_ZOOM = 0.2f; // zoom mínimo permitido
 double ZOOM_INITIAL = 0.8f; // zoom inicial
 
 double ZOOM_MOD = 0.08f; // alteração do zoom
@@ -83,6 +83,6 @@ void Camera::getRenderDistance(std::shared_ptr<Window> window, double& dist_hori
     window->getDimensions(w_width, w_height);
 
     // calculando distância observada (top-bottom, left-right)
-    dist_horiz = 1.1f * (w_width * (1.f / this->zoom));
-    dist_vert = 1.1f * (w_height * (1.f / this->zoom));
+    dist_horiz = 1.2f * (w_width * (1.f / this->zoom));
+    dist_vert = 1.2f * (w_height * (1.f / this->zoom));
 }

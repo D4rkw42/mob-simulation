@@ -3,16 +3,15 @@
         "list": ["forest"],
 
         "forest": {
-            "factor": 900,
-            "random-factor": 96183433,
+            "factor": 1000,
             "tiles": ["grass", "dirt"],
 
             "grass": {
-                "factor": 900,
+                "factor": 1000,
                 "variations": [1, 2, 3]
             },
             "dirt": {
-                "factor": 300,
+                "factor": 200,
                 "variations": [1, 2, 3, 4]
             }
         }

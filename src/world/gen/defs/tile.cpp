@@ -10,40 +10,30 @@
 // definições
 const char* TILE_IMG_PATH = "assets/images/world/terrain/";
 
-Tile::Tile(std::string name, std::string biome, int variation, int x, int y, int width) : name(name), biome(biome), variation(variation), x(x), y(y), width(width) {}
-Tile::~Tile() {
-    SDL_DestroyTexture(this->texture);
-    SDL_FreeSurface(this->surface);
+Tile::Tile(std::string name, std::string biome, int variation, int x, int y, int width) : name(name + std::to_string(variation)), biome(biome), variation(variation), x(x), y(y), width(width) {
+    this->file = std::string(TILE_IMG_PATH) + name + "/" + this->name + ".png";
 }
 
-void Tile::render(std::shared_ptr<Window> window, std::shared_ptr<Camera> camera) {
+void Tile::render(RenderData render_data, std::shared_ptr<Camera> camera) {
     double x, y, width, height;
 
     // calculando coordenadas virtuais
-    SDL_Rect rect;
+    _img_data img_data;
 
-    camera->viewport(window, ObjectInfo {
+    camera->viewport(render_data.window, ObjectInfo {
         static_cast<double>(this->width), static_cast<double>(this->width),
         static_cast<double>(this->x), static_cast<double>(this->y)
     }, x, y, width, height);
 
-    rect.x = x;
-    rect.y = y;
-    rect.w = width;
-    rect.h = height;
+    img_data.x = x;
+    img_data.y = y;
+    img_data.w = width;
+    img_data.h = height;
 
-    // renderizando
-    SDL_RenderCopy(window->renderer, this->texture, nullptr, &rect);
-}
+    // criando nova imagem caso não exista
+    if (!SDL_Image::exists(render_data.collection, this->name)) {
+        SDL_Image::loadImage(render_data.collection, this->name, render_data.window, this->file);
+    }
 
-//
-
-void Tile::loadTexture(std::shared_ptr<Window> window, std::shared_ptr<Tile> tile) {
-    std::string img_path = std::string(TILE_IMG_PATH) + tile->name + "/" + tile->name + std::to_string(tile->variation) + ".png";
-    
-    SDL_Surface* surface = IMG_Load(img_path.c_str());
-    SDL_Texture* texture = SDL_CreateTextureFromSurface(window->renderer, surface);
-
-    tile->surface = surface;
-    tile->texture = texture;
+    SDL_Image::render(render_data, this->name, &img_data, nullptr);
 }

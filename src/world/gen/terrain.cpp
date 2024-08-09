@@ -8,12 +8,18 @@
 
 #include <nlohmann/json.hpp>
 #include <iostream>
+#include <exception>
 
 using json = nlohmann::json;
 
 //
 
-const unsigned int TILE_SIZE = 32; // tamanho real de cada tile no mundo
+const unsigned int TILE_SIZE = 30; // tamanho real de cada tile no mundo
+
+// configuração de geração
+const double GEN_DETAILS = 8.f; // nível de detalhes do mundo
+const double GEN_AMPLITUDE = 0.2f; // variação dos valores
+const double GEN_MOD = 0.1f; // o quando cada mudança de bloco irá impactar no mundo
 
 // auxilia no sorteio do bioma
 struct BiomeInfo {
@@ -63,9 +69,6 @@ void generateTerrain(std::shared_ptr<Window> window, std::shared_ptr<Camera> cam
         n_vert_tiles = MAX_VERTICAL_RENDERIZATION;
     }
 
-    std::cout << "hor: " << n_horiz_tiles << "\n";
-    std::cout << "ver: " << n_vert_tiles << "\n";
-
     // zerando lista para nova geração
     _tiles.fill(nullptr);
 
@@ -88,19 +91,20 @@ void generateTerrain(std::shared_ptr<Window> window, std::shared_ptr<Camera> cam
         for (int y = start_y; y < final_y; y += TILE_SIZE) {
             // lógica de geração de mundo
 
-            double biome_selector = perlin.octave2D_01(x, y, 10); // número referente à seleção de bioma
-            double b_discriminant = biome_selector * 1000;
+            // número aleatório para reger o mundo
+            double perlin_n = perlin.octave2D_01(x / TILE_SIZE * GEN_MOD, y / TILE_SIZE * GEN_MOD, GEN_DETAILS, GEN_AMPLITUDE); // número referente à seleção de bioma
+            double determinant = perlin_n * 1000;
+            //std::cout << determinant << "\n";
 
             // descobrindo qual bioma foi selecionado para o esquema
-
             int biome_selected = 0;
+            int b_factor = 1000;
 
             for (int i = 0; i < biomes_list.size(); ++i) {
-                // o bioma selecionado terá prioridade se estiver dentro da faixa e for o maior possível
-                if (biomes[i].factor > biomes[biome_selected].factor && biomes[i].factor <= b_discriminant) {
+                if (biomes[i].factor >= determinant && biomes[i].factor <= b_factor) {
+                    b_factor = biomes[i].factor;
                     biome_selected = i;
                 }
-                // caso nenhum seja escolhido, será o bioma 0
             }
 
             // nome do bioma selecionado
@@ -121,39 +125,32 @@ void generateTerrain(std::shared_ptr<Window> window, std::shared_ptr<Camera> cam
                 tiles[t] = TileInfo {name, factor, variations};
             }
 
-            double tile_selector = perlin.octave3D_01(x, y, static_cast<double>(biome_config[biome_name]["random-factor"]), 10);
-            double t_discriminant = tile_selector * 1000;
 
             // descobrindo qual bioma foi selecionado para o esquema
-
             int tile_selected = 0;
+            int t_factor = 1000;
 
             for (int i = 0; i < tile_list.size(); ++i) {
-                // o bioma selecionado terá prioridade se estiver dentro da faixa e for o maior possível
-                if (tiles[i].factor > tiles[tile_selected].factor && tiles[i].factor <= t_discriminant) {
+                if (tiles[i].factor >= determinant && tiles[i].factor <= t_factor) {
+                    t_factor = tiles[i].factor;
                     tile_selected = i;
                 }
-                // caso nenhum seja escolhido, será o tile 0
             }
 
             // a incluir: variação!!!! Por enquanto, sempre 1
 
             // alocando o tile na memória
-            std::shared_ptr<Tile> m_tile = std::make_shared<Tile>(tiles[tile_selected].name, biomes[biome_selected].name, 1, x, y, TILE_SIZE);
-            Tile::loadTexture(window, m_tile); // carregando textura do tile
+            std::shared_ptr<Tile> m_tile = std::make_shared<Tile>(tiles[tile_selected].name, biomes[biome_selected].name, 1, x, y, TILE_SIZE + 2);
 
             _tiles[id++] = m_tile;
-            std::cout << id << "\n";
-
         }
     }
-
 }
 
-void renderTerrain(std::shared_ptr<Window> window, std::shared_ptr<Camera> camera, std::array<std::shared_ptr<Tile>, MAX_HORIZONTAL_RENDERIZATION * MAX_VERTICAL_RENDERIZATION> tiles) {
+void renderTerrain(RenderData render_data, std::shared_ptr<Camera> camera, std::array<std::shared_ptr<Tile>, MAX_HORIZONTAL_RENDERIZATION * MAX_VERTICAL_RENDERIZATION> tiles) {
     for (auto tile : tiles) {
         if (tile != nullptr) {
-            tile->render(window, camera);
+            tile->render(render_data, camera);
         }
     }
 }

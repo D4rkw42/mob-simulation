@@ -69,7 +69,7 @@ void Entity::updateAnimations(void) {
         std::string f_path = this->animation_info[this->state]["spritesheet"];
         std::string file = g_path + f_path;
 
-        this->animation.set(file, a_info);
+        this->animation.set(file, a_info, ENTITY_TYPE_LIST[this->type] + this->state);
         this->_last_state = this->state;
     }
 }
