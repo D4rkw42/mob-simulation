@@ -7,6 +7,7 @@
 #include <memory>
 #include <array>
 #include <PerlinNoise/PerlinNoise.hpp>
+#include <nlohmann/json.hpp>
 
 #include "config/config.hpp"
 #include "config/sdl2/graphics/window.hpp"
@@ -18,6 +19,9 @@
 
 #include "utils/world/camera.hpp"
 #include "utils/events/mouse.hpp"
+
+// arquivo de configuração
+extern nlohmann::json config;
 
 // declarações para o funcionamento do SDL2
 extern ImageCollection imageCollection;

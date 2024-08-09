@@ -12,5 +12,5 @@ TODO LIST TO FINAL PROJECT (DUE TO 31/12)
 - Item System and Inventory []
 - Data Saving []
 - Audio Effects []
-- Add Custom Configurations .json file -> to add ?? []
+- Add Custom Configurations .json file -> to add ?? [x]
 - Add Translation sys ?? []

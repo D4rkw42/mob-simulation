@@ -4,6 +4,9 @@
 
 #include "application.hpp"
 
+#include <fstream>
+#include <nlohmann/json.hpp>
+
 #include "global.hpp"
 
 #include "config/sdl2/graphics/window.hpp"
@@ -14,8 +17,15 @@
 #include "world/entity/mobs/mobs.hpp"
 #include "world/gen/terrain.hpp"
 
+using json = nlohmann::json;
+
 // configurações iniciais e quit
 void app::ApplicationConfigure(void) {
+    // abrindo configurações da aplicação
+    std::ifstream config_file("assets/config.json");
+    config = json::parse(config_file);
+
+    // inciando janela
     window = createWindow(APPLICATION_NAME);
 
     // world inicialization

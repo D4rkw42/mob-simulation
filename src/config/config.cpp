@@ -7,8 +7,6 @@
 // configuração
 const char* APPLICATION_NAME = "Mob Simulation";
 
-const unsigned short FRAME_RATE = 60;
-
 const siv::PerlinNoise::seed_type seed = 123456u;
 
 // world definitions

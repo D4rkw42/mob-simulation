@@ -16,11 +16,6 @@ using json = nlohmann::json;
 
 const unsigned int TILE_SIZE = 30; // tamanho real de cada tile no mundo
 
-// configuração de geração
-const double GEN_DETAILS = 3.f; // nível de detalhes do mundo
-const double GEN_AMPLITUDE = 1.4f; // variação dos valores
-const double GEN_MOD = 0.06f; // o quando cada mudança de bloco irá impactar no mundo
-
 // auxilia no sorteio do bioma
 struct BiomeInfo {
     std::string name; // nome do bioma
@@ -35,6 +30,11 @@ struct TileInfo {
 };
 
 void generateTerrain(std::shared_ptr<Window> window, std::shared_ptr<Camera> camera, std::array<std::shared_ptr<Tile>, MAX_HORIZONTAL_RENDERIZATION * MAX_VERTICAL_RENDERIZATION>& _tiles) {
+    // configurações da aplicação
+    double GEN_DETAILS = config["world"]["gen"]["details"]; // nível de detalhes
+    double GEN_AMPLITUDE = config["world"]["gen"]["amplitude"]; // amplitude dos valores (variação)
+    double GEN_MOD = config["world"]["gen"]["mod"]; // o quando cada mudança de bloco irá impactar no mundo
+
     // obtendo as configurações de bioma
     std::ifstream world_config(WORLD_CONFIG_FILE);
     json biome_config = json::parse(world_config)["biomes"];

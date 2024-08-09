@@ -10,8 +10,6 @@
 // configuração
 extern const char* APPLICATION_NAME;
 
-extern const unsigned short FRAME_RATE;
-
 extern const siv::PerlinNoise::seed_type seed; // semente de geração do mundo
 
 // world definitions

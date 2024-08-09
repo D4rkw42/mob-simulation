@@ -4,6 +4,9 @@
 
 #include "global.hpp"
 
+// arquivo de configuração
+nlohmann::json config;
+
 // declarações para o funcionamento do SDL2
 ImageCollection imageCollection;
 

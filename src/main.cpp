@@ -48,6 +48,9 @@ int main(int argc, char* argv[]) {
         return EXIT_FAILURE;
     }
 
+    // configurações da aplicação
+    int FRAME_RATE = config["app"]["frame-rate"];
+
     while (!SDL_QuitRequested()) {
         SDL_PollEvent(&event);
         handleEvents(event);
