@@ -7,18 +7,13 @@
 #include <SDL2/SDL_image.h>
 #include <iostream>
 
-Animation::Animation(void) : surface(nullptr), flipped(false) {};
-Animation::~Animation() {
-    SDL_FreeSurface(this->surface);
-}
+Animation::Animation(void) : flipped(false) {};
 
-void Animation::set(std::string file, AnimationInfo info) {
-    if (this->surface != nullptr) {
-        SDL_FreeSurface(this->surface);
-    }
-
-    this->surface = IMG_Load(file.c_str());
+void Animation::set(std::string file, AnimationInfo info, std::string general_id) {
+    this->id = general_id;
     this->info = info;
+    this->file = file;
+
     this->sprite = 0;
     this->count = 0;
 }
@@ -38,33 +33,37 @@ void Animation::load(int elapsedTime) {
     }
 }
 
-void Animation::render(std::shared_ptr<Window> window, std::shared_ptr<Camera> camera, int x, int y, double scale) {
-    SDL_Texture* texture = SDL_CreateTextureFromSurface(window->renderer, this->surface);
-    SDL_Rect rect_pos, rect_split; // retangulo para posicionamento e para ajuste
-
+void Animation::render(RenderData render_data, std::shared_ptr<Camera> camera, int x, int y, double scale) {
     double pos_x, pos_y, _width, _height;
 
     // calculando posição na tela
-    camera->viewport(window, ObjectInfo {
+    camera->viewport(render_data.window, ObjectInfo {
         static_cast<double>(this->info.width),
         static_cast<double>(this->info.height),
         static_cast<double>(x), static_cast<double>(y)
     }, pos_x, pos_y, _width, _height);
 
     // posição
-    rect_pos.w = _width * scale;
-    rect_pos.h = _height * scale;
-    rect_pos.x = pos_x - rect_pos.w / 2;
-    rect_pos.y = pos_y - rect_pos.h / 2;
+    int img_w = _width * scale;
+    int img_h = _height * scale;
+    int img_x = pos_x - img_w / 2;
+    int img_y = pos_y - img_h / 2;
 
     // recorte
-    rect_split.x = this->info.width * this->sprite;
-    rect_split.y = 0;
-    rect_split.w = this->info.width;
-    rect_split.h = this->info.height;
+    int img_crop_x = this->info.width * this->sprite;
+    int img_crop_y = 0;
+    int img_crop_w = this->info.width;
+    int img_crop_h = this->info.height;
 
-    SDL_RenderCopyEx(window->renderer, texture, &rect_split, &rect_pos, 0, nullptr, this->flipped? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
-    SDL_DestroyTexture(texture);
+    _img_data img_data = {img_x, img_y, img_w, img_h};
+    _img_data img_crop = {img_crop_x, img_crop_y, img_crop_w, img_crop_h};
+
+    // criando nova imagem caso precise
+    if (!SDL_Image::exists(render_data.collection, this->id)) {
+        SDL_Image::loadImage(render_data.collection, this->id, render_data.window, this->file);
+    }
+
+    SDL_Image::render(render_data, this->id, &img_data, &img_crop, this->flipped);
 }
 
 //

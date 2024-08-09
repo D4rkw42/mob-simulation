@@ -4,6 +4,9 @@
 
 #include "global.hpp"
 
+// declarações para o funcionamento do SDL2
+ImageCollection imageCollection;
+
 // definições gerais
 std::shared_ptr<Window> window;
 
