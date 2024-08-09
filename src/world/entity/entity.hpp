@@ -45,7 +45,7 @@ class Entity {
         // funções compartilhadas de operação
 
         virtual void update(int elapsedTime);
-        virtual void render(std::shared_ptr<Window> window, std::shared_ptr<Camera> camera);
+        virtual void render(RenderData render_data, std::shared_ptr<Camera> camera);
 
         void invalidate(void); // torna a entidade inválida
 

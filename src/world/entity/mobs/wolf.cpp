@@ -28,8 +28,8 @@ void Wolf::update(int elapsedTime) {
     }
 }
 
-void Wolf::render(std::shared_ptr<Window> window, std::shared_ptr<Camera> camera) {
+void Wolf::render(RenderData render_data, std::shared_ptr<Camera> camera) {
     // atualização de animações
     updateAnimations();
-    this->animation.render(window, camera, this->x, this->y);
+    this->animation.render(render_data, camera, this->x, this->y);
 }

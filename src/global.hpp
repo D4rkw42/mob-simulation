@@ -10,6 +10,7 @@
 
 #include "config/config.hpp"
 #include "config/sdl2/graphics/window.hpp"
+#include "config/sdl2/graphics/image.hpp"
 
 #include "world/gen/defs/tile.hpp"
 #include "world/entity/entity.hpp"
@@ -17,6 +18,9 @@
 
 #include "utils/world/camera.hpp"
 #include "utils/events/mouse.hpp"
+
+// declarações para o funcionamento do SDL2
+extern ImageCollection imageCollection;
 
 // declarações gerais
 extern std::shared_ptr<Window> window;

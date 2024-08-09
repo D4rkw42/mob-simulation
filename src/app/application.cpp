@@ -23,7 +23,7 @@ void app::ApplicationConfigure(void) {
 
     // colocando todos os tiles do terreno para nullptr e pré-geração
     tiles.fill(nullptr);
-    generateTerrain(window, camera, tiles);
+    // generateTerrain(window, camera, tiles);
 
     // colocando todos os objetos de mob_list para nullptr
     mob_list.fill(nullptr);
@@ -32,6 +32,10 @@ void app::ApplicationConfigure(void) {
 }
 
 void app::ApplicationQuit(void) {
+    // deleting sdl config vars
+    imageCollection.clear();
+
+    // deleting world vars
     tiles.fill(nullptr);
     mob_list.fill(nullptr);
 }
@@ -41,14 +45,14 @@ void app::update(int elapsedTime) {
     // atualizando definições de controle
     camera->updateCameraPosition(mouse);
 
-    static int count = 0;
-    count += elapsedTime;
+    // static int count = 0;
+    // count += elapsedTime;
 
     // gerando terreno a cada 10 segundos (teste)
-    if (count >= 20000) {
-        count = 0;
-        generateTerrain(window, camera, tiles);
-    }
+    // if (count >= 20000) {
+    //    count = 0;
+    //    generateTerrain(window, camera, tiles);
+    // }
 
     // atualizando todos os mobs
     for (auto mob : mob_list) {
@@ -61,13 +65,16 @@ void app::update(int elapsedTime) {
 void app::render(void) {
     window->clear();
 
+    // dados básicos para renderização
+    RenderData render_data {window, imageCollection};
+
     // renderizando terreno
-    renderTerrain(window, camera, tiles);
+    // renderTerrain(window, camera, tiles);
 
     // renderizando todos os mobs
     for (auto mob : mob_list) {
         if (mob != nullptr) {
-            mob->render(window, camera);
+            mob->render(render_data, camera);
         }
     }
 

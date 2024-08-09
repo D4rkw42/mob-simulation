@@ -12,5 +12,5 @@ class Wolf : public Entity {
         Wolf(int x, int y);
 
         void update(int elapsedTime);
-        void render(std::shared_ptr<Window> window, std::shared_ptr<Camera> camera);
+        void render(RenderData render_data, std::shared_ptr<Camera> camera);
 };

@@ -13,6 +13,7 @@
 #include "global.hpp"
 
 #include "config/sdl2/graphics/window.hpp"
+#include "config/sdl2/graphics/image.hpp"
 #include "utils/world/camera.hpp"
 
 #include "world/gen/defs/tile.hpp"
