@@ -11,9 +11,9 @@ Wolf::Wolf(int x, int y) : Entity(
     x, y
 ) {setState("chasing");}
 
-void Wolf::update(int elapsedTime) {
+void Wolf::update(int deltatime) {
     // atualização de animações
-    this->animation.load(elapsedTime);
+    this->animation.load(deltatime);
 
     // atualização de movimento
     move();

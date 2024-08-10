@@ -11,7 +11,7 @@
 const char* TILE_IMG_PATH = "assets/images/world/terrain/";
 
 Tile::Tile(std::string name, std::string biome, int variation, int x, int y, int width) : name(name + std::to_string(variation)), biome(biome), variation(variation), x(x), y(y), width(width) {
-    this->file = std::string(TILE_IMG_PATH) + name + "/" + this->name + ".png";
+    this->file = std::string(TILE_IMG_PATH) + name + "/" + this->name + ".jpg";
 }
 
 void Tile::render(RenderData render_data, std::shared_ptr<Camera> camera) {

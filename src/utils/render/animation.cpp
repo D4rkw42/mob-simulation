@@ -18,9 +18,9 @@ void Animation::set(std::string file, AnimationInfo info, std::string general_id
     this->count = 0;
 }
 
-void Animation::load(int elapsedTime) {
+void Animation::load(int deltatime) {
     // passando para o próximo sprite
-    this->count += elapsedTime;
+    this->count += deltatime;
 
     if (this->count >= this->info.duration / this->info.n_sprites) {
         this->count = 0;

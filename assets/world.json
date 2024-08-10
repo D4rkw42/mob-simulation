@@ -1,23 +1,32 @@
 {
     "biomes": {
-        "list": ["forest"],
+        "list": ["forest", "desert", "ocean"],
 
         "forest": {
             "factor": 1000,
-            "tiles": ["grass", "dirt", "stone"],
+            "tiles": ["grass", "dirt"],
 
             "grass": {
                 "factor": 1000,
-                "variations": [1, 1, 1, 2, 2]
+                "variations": [1, 1, 1, 1, 2, 2]
             },
             "dirt": {
-                "factor": 300,
-                "variations": [1]
-            },
-            "stone": {
                 "factor": 100,
                 "variations": [1]
             }
+        },
+        "desert": {
+            "factor": 400,
+            "tiles": ["sand", "stone"],
+
+            "sand": {"factor": 1000, "variations": [1, 1, 2]},
+            "stone": {"factor": 80, "variations": [1]}
+        },
+        "ocean": {
+            "factor": 600,
+            "tiles": ["water"],
+
+            "water": {"factor": 1000, "variations": [1]}
         }
     }
 }

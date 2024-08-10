@@ -29,7 +29,7 @@ class Animation {
         void set(std::string file, AnimationInfo info, std::string general_id = "");
 
         void render(RenderData render_data, std::shared_ptr<Camera> camera, int x, int y, double scale = 1.f); // renderiza a animação na tela selecionada
-        void load(int elapsedTime); // atualiza a animação
+        void load(int deltatime); // atualiza a animação
 
         void flip(bool flip); // se a imagem deve ser flippada
 

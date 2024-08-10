@@ -14,7 +14,12 @@ using json = nlohmann::json;
 
 //
 
-const unsigned int TILE_SIZE = 30; // tamanho real de cada tile no mundo
+const int TILE_SIZE = 30; // tamanho real de cada tile no mundo
+
+// definição para variação de bioma
+double BIOME_GEN_DETAILS = 2.f;
+double BIOME_GEN_AMPLITUDE = 1.4f;
+double BIOME_GEN_MOD = 0.001f;
 
 // auxilia no sorteio do bioma
 struct BiomeInfo {
@@ -61,6 +66,14 @@ void generateTerrain(std::shared_ptr<Window> window, std::shared_ptr<Camera> cam
     int n_horiz_tiles = dist_horiz / TILE_SIZE;
     int n_vert_tiles = dist_vert / TILE_SIZE;
 
+    if (n_horiz_tiles % 2 != 0) {
+        n_horiz_tiles--;
+    }
+
+    if (n_vert_tiles % 2 != 0) {
+        n_vert_tiles--;
+    }
+
     if (n_horiz_tiles > MAX_HORIZONTAL_RENDERIZATION) {
         n_horiz_tiles = MAX_HORIZONTAL_RENDERIZATION;
     }
@@ -92,16 +105,18 @@ void generateTerrain(std::shared_ptr<Window> window, std::shared_ptr<Camera> cam
             // lógica de geração de mundo
 
             // número aleatório para reger o mundo
-            double perlin_n = perlin.octave2D_01(x / TILE_SIZE * GEN_MOD, y / TILE_SIZE * GEN_MOD, GEN_DETAILS, GEN_AMPLITUDE); // número referente à seleção de bioma
-            double determinant = perlin_n * 1000;
-            //std::cout << determinant << "\n";
+            double perlin_t = perlin.octave2D_01(x / TILE_SIZE * GEN_MOD, y / TILE_SIZE * GEN_MOD, GEN_DETAILS, GEN_AMPLITUDE); // número referente à seleção de tiles
+            double perlin_b = perlin.octave2D_01(x / TILE_SIZE * BIOME_GEN_MOD, y / TILE_SIZE * BIOME_GEN_MOD, BIOME_GEN_DETAILS, BIOME_GEN_AMPLITUDE); // número referente à seleção de bioma
+
+            double b_determinant = perlin_b * 1000;
+            double t_determinant = perlin_t * 1000;
 
             // descobrindo qual bioma foi selecionado para o esquema
             int biome_selected = 0;
             int b_factor = 1000;
 
             for (int i = 0; i < biomes_list.size(); ++i) {
-                if (biomes[i].factor >= determinant && biomes[i].factor <= b_factor) {
+                if (biomes[i].factor >= b_determinant && biomes[i].factor <= b_factor) {
                     b_factor = biomes[i].factor;
                     biome_selected = i;
                 }
@@ -131,7 +146,7 @@ void generateTerrain(std::shared_ptr<Window> window, std::shared_ptr<Camera> cam
             int t_factor = 1000;
 
             for (int i = 0; i < tile_list.size(); ++i) {
-                if (tiles[i].factor >= determinant && tiles[i].factor <= t_factor) {
+                if (tiles[i].factor >= t_determinant && tiles[i].factor <= t_factor) {
                     t_factor = tiles[i].factor;
                     tile_selected = i;
                 }
@@ -140,7 +155,7 @@ void generateTerrain(std::shared_ptr<Window> window, std::shared_ptr<Camera> cam
             // computando variação de blocos
             
             int n_variations = tiles[tile_selected].variations.size();
-            int variation_selected = trunc(perlin_n * n_variations) - 1;
+            int variation_selected = trunc(perlin_t * n_variations) - 1;
 
             // proteção
             if (variation_selected < 0) {
@@ -157,8 +172,9 @@ void generateTerrain(std::shared_ptr<Window> window, std::shared_ptr<Camera> cam
 
 void renderTerrain(RenderData render_data, std::shared_ptr<Camera> camera, std::array<std::shared_ptr<Tile>, MAX_HORIZONTAL_RENDERIZATION * MAX_VERTICAL_RENDERIZATION> tiles) {
     for (auto tile : tiles) {
-        if (tile != nullptr) {
-            tile->render(render_data, camera);
+        if (tile == nullptr) {
+            break;
         }
+        tile->render(render_data, camera);
     }
 }

@@ -58,14 +58,14 @@ int main(int argc, char* argv[]) {
         // definição do tempo decorrido
 
         curr_epoch = epoch_time;
-        int elapsedTime = curr_epoch - last_epoch;
+        int deltatime = curr_epoch - last_epoch;
 
         last_epoch = curr_epoch;
 
         // renderização e atualização
-        app::update(elapsedTime);
+        app::update(deltatime);
 
-        frame_rate_count += elapsedTime;
+        frame_rate_count += deltatime;
 
         if (frame_rate_count >= 1000 / FRAME_RATE) {
             frame_rate_count = 0;
@@ -76,10 +76,9 @@ int main(int argc, char* argv[]) {
 
         // contagem de fps
 
-        fps_count_time += elapsedTime;
+        fps_count_time += deltatime;
 
         if (fps_count_time >= 1000) {
-            std::cout << "FPS: " << last_fps << "\n";
             fps_count_time = 0;
             last_fps = 0;
         }

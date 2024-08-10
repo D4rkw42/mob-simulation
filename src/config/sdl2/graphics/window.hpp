@@ -10,8 +10,8 @@
 
 // config
 
-const unsigned short WINDOW_WIDTH = 600;
-const unsigned short WINDOW_HEIGHT = 400;
+const unsigned short WINDOW_WIDTH = 800;
+const unsigned short WINDOW_HEIGHT = 600;
 
 // definição geral de janela
 class Window {

@@ -4,6 +4,7 @@
 
 #include "application.hpp"
 
+#include <iostream>
 #include <fstream>
 #include <nlohmann/json.hpp>
 
@@ -50,13 +51,13 @@ void app::ApplicationQuit(void) {
 }
 
 // funcionamento geral da aplicação
-void app::update(int elapsedTime) {
+void app::update(int deltatime) {
     // atualizando definições de controle
     camera->updateCameraPosition(mouse);
 
     // geração de terreno
     static int gen_count = 0;
-    gen_count += elapsedTime;
+    gen_count += deltatime;
 
     // gera novo terreno a cada 1,5 s
     if (gen_count > 300) {
@@ -66,9 +67,10 @@ void app::update(int elapsedTime) {
 
     // atualizando todos os mobs
     for (auto mob : mob_list) {
-        if (mob != nullptr) {
-            mob->update(elapsedTime);
+        if (mob == nullptr) {
+            break;
         }
+        mob->update(deltatime);
     }
 }
 
@@ -83,9 +85,10 @@ void app::render(void) {
 
     // renderizando todos os mobs
     for (auto mob : mob_list) {
-        if (mob != nullptr) {
-            mob->render(render_data, camera);
+        if (mob == nullptr) {
+            break;
         }
+        mob->render(render_data, camera);
     }
 
     window->render();

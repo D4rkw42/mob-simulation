@@ -5,9 +5,9 @@
     
     "world": {
         "gen": {
-            "details": 3.0,
-            "amplitude": 1.4,
-            "mod": 0.06
+            "details": 6.0,
+            "amplitude": 1.0,
+            "mod": 0.01
         }
     }
 }

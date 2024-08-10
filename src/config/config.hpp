@@ -19,4 +19,4 @@ extern const char* WORLD_CONFIG_FILE; // arquivo de configuração do mundo
 
 // máxima renderização definida em tiles
 #define MAX_VERTICAL_RENDERIZATION 120 // renderização máxima vertical (topo-baixo)
-#define MAX_HORIZONTAL_RENDERIZATION 160 // renderização máxima horizontal (esquerda-direita)
+#define MAX_HORIZONTAL_RENDERIZATION 180 // renderização máxima horizontal (esquerda-direita)

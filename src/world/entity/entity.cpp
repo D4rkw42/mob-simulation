@@ -80,7 +80,7 @@ void Entity::invalidate(void) {
 
 // funções compartilhadas de operação
 
-void Entity::update(int elapsedTime) {}
+void Entity::update(int deltatime) {}
 void Entity::render(RenderData render_data, std::shared_ptr<Camera> camera) {}
 
 // funções compartilhadas que mudam o estado
