@@ -4,6 +4,7 @@
 
 #include "application.hpp"
 
+#include <ctime>
 #include <iostream>
 #include <fstream>
 #include <nlohmann/json.hpp>
@@ -28,10 +29,10 @@ void app::ApplicationConfigure(void) {
     config = json::parse(config_file);
 
     // demais configurações
-    perlin_noise = FastNoiseLite(1000);
-    voronoi_noise = FastNoiseLite(1000);
+    perlin_noise = FastNoiseLite(time(0));
+    voronoi_noise = FastNoiseLite(time(0));
 
-    perlin_noise.SetNoiseType(FastNoiseLite::NoiseType_OpenSimplex2);
+    perlin_noise.SetNoiseType(FastNoiseLite::NoiseType_OpenSimplex2S);
     voronoi_noise.SetNoiseType(FastNoiseLite::NoiseType_Cellular);
 
     // inciando janela

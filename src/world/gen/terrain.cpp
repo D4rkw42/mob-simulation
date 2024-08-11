@@ -40,9 +40,9 @@ void generateTerrain(std::shared_ptr<Window> window, std::shared_ptr<Camera> cam
     // configurando noises
     
     // voronoi_noise (para biomas)
-    voronoi_noise.SetCellularDistanceFunction(Noise::CellularDistanceFunction::CellularDistanceFunction_Manhattan);
-    voronoi_noise.SetDomainWarpType(Noise::DomainWarpType::DomainWarpType_OpenSimplex2Reduced);
-    voronoi_noise.SetFractalType(Noise::FractalType::FractalType_FBm);
+    voronoi_noise.SetCellularDistanceFunction(Noise::CellularDistanceFunction::CellularDistanceFunction_Hybrid);
+    voronoi_noise.SetDomainWarpType(Noise::DomainWarpType::DomainWarpType_OpenSimplex2);
+    voronoi_noise.SetFractalType(Noise::FractalType::FractalType_PingPong);
     voronoi_noise.SetCellularReturnType(Noise::CellularReturnType::CellularReturnType_CellValue);
 
     voronoi_noise.SetFractalOctaves(biome["octaves"]);
@@ -136,8 +136,6 @@ void generateTerrain(std::shared_ptr<Window> window, std::shared_ptr<Camera> cam
 
             voronoi = map(voronoi, -1, 1, 0, 1);
             perlin = map(perlin, -1, 1, 0, 1);
-
-            voronoi -= static_cast<int>(voronoi) % 3;
 
             // descobrindo qual bioma foi selecionado para o esquema
             int biome_selected = 0;

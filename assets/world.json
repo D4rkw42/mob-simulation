@@ -11,11 +11,11 @@
                 "variations": [1, 2, 3]
             },
             "dirt": {
-                "factor": 0.5,
+                "factor": 0.3,
                 "variations": [1]
             },
             "stone": {
-                "factor": 0.08,
+                "factor": 0.1,
                 "variations": [1, 2, 3]
             }
         },
@@ -23,8 +23,8 @@
             "factor": 0.35,
             "tiles": ["sand", "stone"],
 
-            "sand": {"factor": 1.0, "variations": [1, 2]},
-            "stone": {"factor": 0.02, "variations": [1, 2, 3, 4]}
+            "sand": {"factor": 1.0, "variations": [1, 1, 1, 2, 2]},
+            "stone": {"factor": 0.15, "variations": [1, 2, 3, 4]}
         },
         "ocean": {
             "factor": 0.6,
