@@ -13,8 +13,9 @@ ImageCollection imageCollection;
 // definições gerais
 std::shared_ptr<Window> window;
 
-// definição para perlin noise
-const siv::PerlinNoise perlin = siv::PerlinNoise {seed}; 
+// definição para noises
+FastNoiseLite perlin_noise;
+FastNoiseLite voronoi_noise;
 
 // para gestão de eventos
 Mouse mouse = {

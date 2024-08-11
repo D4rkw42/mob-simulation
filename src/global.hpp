@@ -6,7 +6,7 @@
 
 #include <memory>
 #include <array>
-#include <PerlinNoise/PerlinNoise.hpp>
+#include <FastNoise/FastNoiseLite.h>
 #include <nlohmann/json.hpp>
 
 #include "config/config.hpp"
@@ -29,8 +29,9 @@ extern ImageCollection imageCollection;
 // declarações gerais
 extern std::shared_ptr<Window> window;
 
-// definição para perlin noise
-extern const siv::PerlinNoise perlin; 
+// definição para noises
+extern FastNoiseLite perlin_noise;
+extern FastNoiseLite voronoi_noise;
 
 // para gestão de eventos
 extern Mouse mouse; // definições do mouse

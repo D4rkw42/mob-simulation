@@ -5,12 +5,9 @@
 #pragma once
 
 #include <cstdlib>
-#include <PerlinNoise/PerlinNoise.hpp>
 
 // configuração
 extern const char* APPLICATION_NAME;
-
-extern const siv::PerlinNoise::seed_type seed; // semente de geração do mundo
 
 // world definitions
 extern const char* WORLD_CONFIG_FILE; // arquivo de configuração do mundo

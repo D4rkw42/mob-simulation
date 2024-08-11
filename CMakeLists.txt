@@ -17,13 +17,14 @@ find_package(nlohmann_json CONFIG REQUIRED) # nlohmann::json library
 
 # header definitions
 
-set(PERLIN_NOISE_DIR -I "C:/Program Files/Mingw/include/perlin-noise/include")
+set(FAST_NOISE_DIR -I "C:/Program Files/Mingw/include/FastNoise-CXX/include")
 
 include_directories(
     "${CMAKE_CURRENT_SOURCE_DIR}/src"
     ${SDL2_INCLUDE_DIRS})
 
-add_compile_options(${PERLIN_NOISE_DIR})
+# opções de compilação
+add_compile_options(${FAST_NOISE_DIR})
 
 # getting source files
 
@@ -40,6 +41,7 @@ file(GLOB DIR_APP "src/app/*.cpp")
 
 # utilities root
 file(GLOB DIR_UTILS "src/utils/*.cpp")
+file(GLOB DIR_UTILS_MATH "src/utils/math/*.cpp")
 file(GLOB DIR_UTILS_EVENTS "src/utils/events/*.cpp")
 file(GLOB DIR_UTILS_WORLD "src/utils/world/*.cpp")
 file(GLOB DIR_UTILS_RENDER "src/utils/render/*.cpp")
@@ -63,6 +65,7 @@ add_executable(
     ${DIR_APP}
 
     ${DIR_UTILS}
+    ${DIR_UTILS_MATH}
     ${DIR_UTILS_EVENTS}
     ${DIR_UTILS_WORLD}
     ${DIR_UTILS_RENDER}

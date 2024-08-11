@@ -5,9 +5,24 @@
     
     "world": {
         "gen": {
-            "details": 6.0,
-            "amplitude": 1.0,
-            "mod": 0.01
+
+            "biome": {
+                "mod": 0.008,
+                "octaves": 3,
+                "frequency": 0.1,
+                "lacunarity": 5,
+                "gain": 0.5,
+                "amplitude": 100,
+                "jitter": 1
+            },
+
+            "tile": {
+                "mod": 0.8,
+                "octaves": 6,
+                "frequency": 0.5,
+                "lacunarity": 0.5,
+                "gain": 0.5
+            }
         }
     }
 }

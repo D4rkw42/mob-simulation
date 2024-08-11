@@ -9,7 +9,7 @@ application = "mob-simulation.exe"
 os.system("cls")
 
 # comandos listados
-command_list = ("run", "build")
+command_list = ("run", "makefile", "build")
 commands = []
 
 # comandos
@@ -38,9 +38,16 @@ commands.append(("build", build_command))
 if __name__ == "__main__":
     args = sys.argv
 
+    if len(args) < 2:
+        print("[Tools.py] Indefinição de comando!")
+        exit()
+
     # executando os comandos corretos
     for cmd in commands:
         name = args[1]
 
         if cmd[0] == name:
             cmd[1](args)
+            exit()
+
+    print("[Tools.py] Comando inválido!")

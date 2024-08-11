@@ -14,7 +14,7 @@ Window::Window(std::string name) {
                                     SDL_WINDOWPOS_CENTERED,
                                     WINDOW_WIDTH,
                                     WINDOW_HEIGHT,
-                                    SDL_WINDOW_RESIZABLE
+                                    SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL
                                 );
 
     // window não criada
@@ -23,7 +23,7 @@ Window::Window(std::string name) {
     }
 
     // atribuição
-    this->window = _window;
+    this->window = _window; 
     this->renderer = SDL_CreateRenderer(this->window, -1, SDL_RENDERER_ACCELERATED);
 
     // configuração da janela

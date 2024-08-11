@@ -10,35 +10,55 @@
 #include <iostream>
 #include <exception>
 
+#include "utils/math/math.hpp"
+
 using json = nlohmann::json;
+using Noise = FastNoiseLite;
 
 //
 
 const int TILE_SIZE = 30; // tamanho real de cada tile no mundo
 
-// definição para variação de bioma
-double BIOME_GEN_DETAILS = 2.f;
-double BIOME_GEN_AMPLITUDE = 1.4f;
-double BIOME_GEN_MOD = 0.001f;
-
 // auxilia no sorteio do bioma
 struct BiomeInfo {
     std::string name; // nome do bioma
-    int factor; // fator de sorteio
+    double factor; // fator de sorteio
 };
 
 // auxilia no sorteio de bloco
 struct TileInfo {
     std::string name;
-    int factor;
+    double factor;
     json variations;
 };
 
 void generateTerrain(std::shared_ptr<Window> window, std::shared_ptr<Camera> camera, std::array<std::shared_ptr<Tile>, MAX_HORIZONTAL_RENDERIZATION * MAX_VERTICAL_RENDERIZATION>& _tiles) {
     // configurações da aplicação
-    double GEN_DETAILS = config["world"]["gen"]["details"]; // nível de detalhes
-    double GEN_AMPLITUDE = config["world"]["gen"]["amplitude"]; // amplitude dos valores (variação)
-    double GEN_MOD = config["world"]["gen"]["mod"]; // o quando cada mudança de bloco irá impactar no mundo
+    json biome = config["world"]["gen"]["biome"];
+    json tiles = config["world"]["gen"]["tile"];
+
+    // configurando noises
+    
+    // voronoi_noise (para biomas)
+    voronoi_noise.SetCellularDistanceFunction(Noise::CellularDistanceFunction::CellularDistanceFunction_Manhattan);
+    voronoi_noise.SetDomainWarpType(Noise::DomainWarpType::DomainWarpType_OpenSimplex2Reduced);
+    voronoi_noise.SetFractalType(Noise::FractalType::FractalType_FBm);
+    voronoi_noise.SetCellularReturnType(Noise::CellularReturnType::CellularReturnType_CellValue);
+
+    voronoi_noise.SetFractalOctaves(biome["octaves"]);
+    voronoi_noise.SetFrequency(biome["frequency"]);
+    voronoi_noise.SetCellularJitter(biome["jitter"]);
+    voronoi_noise.SetDomainWarpAmp(biome["amplitude"]);
+    voronoi_noise.SetFractalLacunarity(biome["lacunarity"]);
+    voronoi_noise.SetFractalGain(biome["gain"]);
+    
+    // perlin_noise (para biomas)
+    perlin_noise.SetFractalType(Noise::FractalType::FractalType_FBm);
+    
+    perlin_noise.SetFractalOctaves(tiles["octaves"]);
+    perlin_noise.SetFractalLacunarity(tiles["lacunarity"]);
+    perlin_noise.SetFractalGain(tiles["gain"]);
+    perlin_noise.SetFrequency(tiles["frequency"]);
 
     // obtendo as configurações de bioma
     std::ifstream world_config(WORLD_CONFIG_FILE);
@@ -51,7 +71,7 @@ void generateTerrain(std::shared_ptr<Window> window, std::shared_ptr<Camera> cam
     // nome de cada bioma
     for (int b = 0; b < biomes_list.size(); ++b) {
         std::string name = biomes_list[b];
-        int factor = biome_config[name]["factor"];
+        double factor = biome_config[name]["factor"];
 
         // alocando as informações sobre bioma
         biomes[b] = BiomeInfo {name, factor};
@@ -105,18 +125,26 @@ void generateTerrain(std::shared_ptr<Window> window, std::shared_ptr<Camera> cam
             // lógica de geração de mundo
 
             // número aleatório para reger o mundo
-            double perlin_t = perlin.octave2D_01(x / TILE_SIZE * GEN_MOD, y / TILE_SIZE * GEN_MOD, GEN_DETAILS, GEN_AMPLITUDE); // número referente à seleção de tiles
-            double perlin_b = perlin.octave2D_01(x / TILE_SIZE * BIOME_GEN_MOD, y / TILE_SIZE * BIOME_GEN_MOD, BIOME_GEN_DETAILS, BIOME_GEN_AMPLITUDE); // número referente à seleção de bioma
+            double noise_x_b = x / TILE_SIZE * static_cast<double>(biome["mod"]);
+            double noise_y_b = y / TILE_SIZE * static_cast<double>(biome["mod"]);
 
-            double b_determinant = perlin_b * 1000;
-            double t_determinant = perlin_t * 1000;
+            double noise_x_t = x / TILE_SIZE * static_cast<double>(tiles["mod"]);
+            double noise_y_t = y / TILE_SIZE * static_cast<double>(tiles["mod"]);
+
+            double voronoi = voronoi_noise.GetNoise(noise_x_b, noise_y_b);
+            double perlin = perlin_noise.GetNoise(noise_x_t, noise_y_t);
+
+            voronoi = map(voronoi, -1, 1, 0, 1);
+            perlin = map(perlin, -1, 1, 0, 1);
+
+            voronoi -= static_cast<int>(voronoi) % 3;
 
             // descobrindo qual bioma foi selecionado para o esquema
             int biome_selected = 0;
-            int b_factor = 1000;
+            double b_factor = 1;
 
             for (int i = 0; i < biomes_list.size(); ++i) {
-                if (biomes[i].factor >= b_determinant && biomes[i].factor <= b_factor) {
+                if (biomes[i].factor >= voronoi && biomes[i].factor <= b_factor) {
                     b_factor = biomes[i].factor;
                     biome_selected = i;
                 }
@@ -133,7 +161,7 @@ void generateTerrain(std::shared_ptr<Window> window, std::shared_ptr<Camera> cam
 
             for (int t = 0; t < tile_list.size(); ++t) {
                 std::string name = tile_list[t];
-                int factor = biome_config[biome_name][name]["factor"];
+                double factor = biome_config[biome_name][name]["factor"];
                 json variations = biome_config[biome_name][name]["variations"];
 
                 // alocando informações sobre o tile
@@ -143,10 +171,10 @@ void generateTerrain(std::shared_ptr<Window> window, std::shared_ptr<Camera> cam
 
             // descobrindo qual tile foi selecionado para o esquema
             int tile_selected = 0;
-            int t_factor = 1000;
+            double t_factor = 1;
 
             for (int i = 0; i < tile_list.size(); ++i) {
-                if (tiles[i].factor >= t_determinant && tiles[i].factor <= t_factor) {
+                if (tiles[i].factor >= perlin && tiles[i].factor <= t_factor) {
                     t_factor = tiles[i].factor;
                     tile_selected = i;
                 }
@@ -155,7 +183,7 @@ void generateTerrain(std::shared_ptr<Window> window, std::shared_ptr<Camera> cam
             // computando variação de blocos
             
             int n_variations = tiles[tile_selected].variations.size();
-            int variation_selected = trunc(perlin_t * n_variations) - 1;
+            int variation_selected = trunc(perlin * n_variations) - 1;
 
             // proteção
             if (variation_selected < 0) {

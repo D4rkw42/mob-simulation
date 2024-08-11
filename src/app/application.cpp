@@ -7,6 +7,7 @@
 #include <iostream>
 #include <fstream>
 #include <nlohmann/json.hpp>
+#include <FastNoise/FastNoiseLite.h>
 
 #include "global.hpp"
 
@@ -25,6 +26,13 @@ void app::ApplicationConfigure(void) {
     // abrindo configurações da aplicação
     std::ifstream config_file("assets/config.json");
     config = json::parse(config_file);
+
+    // demais configurações
+    perlin_noise = FastNoiseLite(1000);
+    voronoi_noise = FastNoiseLite(1000);
+
+    perlin_noise.SetNoiseType(FastNoiseLite::NoiseType_OpenSimplex2);
+    voronoi_noise.SetNoiseType(FastNoiseLite::NoiseType_Cellular);
 
     // inciando janela
     window = createWindow(APPLICATION_NAME);
@@ -59,7 +67,7 @@ void app::update(int deltatime) {
     static int gen_count = 0;
     gen_count += deltatime;
 
-    // gera novo terreno a cada 1,5 s
+    // gera novo terreno a cada 0,3 s
     if (gen_count > 300) {
         generateTerrain(window, camera, tiles);
         gen_count = 0;
