@@ -1,0 +1,59 @@
+{
+    "tree": {
+        "scale": 1,
+        "width": 128, "height": 128,
+
+        "offset": {"x": -50, "y": -98}
+    },
+
+    "green_tree1": {
+        "scale": 1.0,
+        "width": 125, "height": 128,
+
+        "offset": {"x": 0, "y": -98}
+    },
+    "green_tree2": {
+        "scale": 1.0,
+        "width": 101, "height": 128,
+
+        "offset": {"x": 0, "y": -98}
+    },
+
+    "brown_tree1": {
+        "scale": 1.0,
+        "width": 124, "height": 128,
+
+        "offset": {"x": -20, "y": -98}
+    },
+    "brown_tree2": {
+        "scale": 1.0,
+        "width": 102, "height": 128,
+        
+        "offset": {"x": 0, "y": -98}
+    },
+
+    "brush_1": {
+        "scale": 0.2,
+        "width": 175, "height": 413,
+        
+        "offset": {"x": 0, "y": -20}
+    },
+    "brush_2": {
+        "scale": 0.1,
+        "width": 236, "height": 361,
+        
+        "offset": {"x": 0, "y": -20}
+    },
+    "brush_3": {
+        "scale": 0.1,
+        "width": 599, "height": 481,
+        
+        "offset": {"x": 0, "y": -20}
+    },
+    "brush_5": {
+        "scale": 0.1,
+        "width": 281, "height": 162,
+    
+        "offset": {"x": 0, "y": -20}
+    }
+}

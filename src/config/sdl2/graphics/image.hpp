@@ -37,7 +37,7 @@ class SDL_Image {
         // funções auxiliares
         static void loadImage(ImageCollection& collection, std::string name, std::shared_ptr<Window> window, std::string file);
         static void deleteImage(ImageCollection& collection, std::string name);
-        static void render(RenderData render_data, std::string name, _img_data* data, _img_data* crop_data, bool flipped = false);
+        static void render(RenderData render_data, std::string name, _img_data* data, _img_data* crop_data = nullptr, bool flipped = false);
 
         // verificação se uma imagem existe
         static bool exists(ImageCollection& collection, std::string name);

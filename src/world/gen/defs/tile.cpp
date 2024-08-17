@@ -35,5 +35,5 @@ void Tile::render(RenderData render_data, std::shared_ptr<Camera> camera) {
         SDL_Image::loadImage(render_data.collection, this->name, render_data.window, this->file);
     }
 
-    SDL_Image::render(render_data, this->name, &img_data, nullptr);
+    SDL_Image::render(render_data, this->name, &img_data);
 }

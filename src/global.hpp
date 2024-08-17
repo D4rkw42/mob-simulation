@@ -14,10 +14,12 @@
 #include "config/sdl2/graphics/image.hpp"
 
 #include "world/gen/defs/tile.hpp"
+#include "world/gen/defs/plant.hpp"
 #include "world/entity/entity.hpp"
 #include "world/entity/mobs/mobs.hpp"
 
 #include "utils/world/camera.hpp"
+#include "utils/world/world-positions.hpp"
 #include "utils/events/mouse.hpp"
 
 // arquivo de configuração
@@ -40,4 +42,5 @@ extern Mouse mouse; // definições do mouse
 extern std::shared_ptr<Camera> camera; // câmera do jogo
 
 extern std::array<std::shared_ptr<Tile>, MAX_HORIZONTAL_RENDERIZATION * MAX_VERTICAL_RENDERIZATION> tiles;
+extern std::array<std::shared_ptr<Plant>, MAX_HORIZONTAL_RENDERIZATION * MAX_VERTICAL_RENDERIZATION> plants;
 extern std::array<std::shared_ptr<Entity>, MAX_MOBS_SPAWNED> mob_list; // lista de mobs

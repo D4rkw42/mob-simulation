@@ -26,6 +26,10 @@ include_directories(
 # opções de compilação
 add_compile_options(${FAST_NOISE_DIR})
 
+add_compile_options(-O2) # optmization
+add_compile_options(-pipe) # fast compiling
+add_compile_options(-pedantic -W) # error handling
+
 # getting source files
 
 # main root

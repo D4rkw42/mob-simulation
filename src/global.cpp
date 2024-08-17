@@ -28,4 +28,5 @@ Mouse mouse = {
 std::shared_ptr<Camera> camera;
 
 std::array<std::shared_ptr<Tile>, MAX_HORIZONTAL_RENDERIZATION * MAX_VERTICAL_RENDERIZATION> tiles;
+std::array<std::shared_ptr<Plant>, MAX_HORIZONTAL_RENDERIZATION * MAX_VERTICAL_RENDERIZATION> plants;
 std::array<std::shared_ptr<Entity>, MAX_MOBS_SPAWNED> mob_list;

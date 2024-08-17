@@ -7,21 +7,38 @@
         "gen": {
 
             "biome": {
-                "mod": 0.1,
+                "mod": 0.08,
                 "octaves": 2,
                 "frequency": 0.01,
-                "lacunarity": 1,
-                "gain": 0.1,
-                "amplitude": 100,
-                "jitter": 1
+                "lacunarity": 4,
+                "gain": 1,
+                "amplitude": 1,
+                "jitter": 0.5
             },
 
             "tile": {
-                "mod": 0.015,
-                "octaves": 8,
-                "frequency": 5,
-                "lacunarity": 2,
-                "gain": 0.08
+                "mod": 0.1,
+                "octaves": 1,
+                "frequency": 1,
+                "lacunarity": 1,
+                "gain": 1
+            },
+
+            "plant": {
+                "area": {
+                    "octaves": 2,
+                    "frequency": 0.003,
+                    "lacunarity": 4,
+                    "gain": 1,
+                    "amplitude": 1,
+                    "jitter": 0.5
+                },
+                "tile": {
+                    "octaves": 2,
+                    "frequency": 0.1,
+                    "lacunarity": 0.1,
+                    "gain": 4
+                }
             }
         }
     }

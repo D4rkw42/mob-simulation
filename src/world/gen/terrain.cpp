@@ -7,17 +7,16 @@
 #include <fstream>
 
 #include <nlohmann/json.hpp>
-#include <iostream>
+#include <FastNoise/FastNoiseLite.h>
 #include <exception>
 
+#include "global.hpp"
 #include "utils/math/math.hpp"
 
 using json = nlohmann::json;
 using Noise = FastNoiseLite;
 
 //
-
-const int TILE_SIZE = 30; // tamanho real de cada tile no mundo
 
 // auxilia no sorteio do bioma
 struct BiomeInfo {
@@ -32,7 +31,7 @@ struct TileInfo {
     json variations;
 };
 
-void generateTerrain(std::shared_ptr<Window> window, std::shared_ptr<Camera> camera, std::array<std::shared_ptr<Tile>, MAX_HORIZONTAL_RENDERIZATION * MAX_VERTICAL_RENDERIZATION>& _tiles) {
+void generateTerrain(std::shared_ptr<Window> window, std::shared_ptr<Camera> camera, WorldPositionsRef worldPosRef, std::array<std::shared_ptr<Tile>, MAX_HORIZONTAL_RENDERIZATION * MAX_VERTICAL_RENDERIZATION>& _tiles) {
     // configurações da aplicação
     json biome = config["world"]["gen"]["biome"];
     json tiles = config["world"]["gen"]["tile"];
@@ -77,122 +76,84 @@ void generateTerrain(std::shared_ptr<Window> window, std::shared_ptr<Camera> cam
         biomes[b] = BiomeInfo {name, factor};
     }
 
-    // calculando posição de cada tile
-
-    // distância de renderização atual
-    double dist_horiz, dist_vert;
-    camera->getRenderDistance(window, dist_horiz, dist_vert);
-
-    int n_horiz_tiles = dist_horiz / TILE_SIZE;
-    int n_vert_tiles = dist_vert / TILE_SIZE;
-
-    if (n_horiz_tiles % 2 != 0) {
-        n_horiz_tiles--;
-    }
-
-    if (n_vert_tiles % 2 != 0) {
-        n_vert_tiles--;
-    }
-
-    if (n_horiz_tiles > MAX_HORIZONTAL_RENDERIZATION) {
-        n_horiz_tiles = MAX_HORIZONTAL_RENDERIZATION;
-    }
-
-    if (n_vert_tiles > MAX_VERTICAL_RENDERIZATION) {
-        n_vert_tiles = MAX_VERTICAL_RENDERIZATION;
-    }
-
     // zerando lista para nova geração
     _tiles.fill(nullptr);
 
-    // posição de referência para a geração
-    int center_x = static_cast<int>(camera->x) - static_cast<int>(camera->x) % TILE_SIZE;
-    int center_y = static_cast<int>(camera->y) - static_cast<int>(camera->y) % TILE_SIZE;
-
-    // posições iniciais e finais de geração
-    int start_x = center_x - TILE_SIZE * n_horiz_tiles / 2;
-    int start_y = center_y - TILE_SIZE * n_vert_tiles / 2;
-
-    int final_x = center_x + TILE_SIZE * n_horiz_tiles / 2;
-    int final_y = center_y + TILE_SIZE * n_vert_tiles / 2;
-
-    // id para alocação na memória
-    int id = 0;
-
     // obtendo cada posição
-    for (int x = start_x; x < final_x; x += TILE_SIZE) {
-        for (int y = start_y; y < final_y; y += TILE_SIZE) {
-            // lógica de geração de mundo
+    for (int id = 0; id < worldPosRef.maxIDGenerated; ++id) {
+        int x = worldPosRef.worldPositions[id].x;
+        int y = worldPosRef.worldPositions[id].y;
 
-            // número aleatório para reger o mundo
-            double noise_x_b = x / TILE_SIZE * static_cast<double>(biome["mod"]);
-            double noise_y_b = y / TILE_SIZE * static_cast<double>(biome["mod"]);
+        // lógica de geração de mundo
 
-            double noise_x_t = x / TILE_SIZE * static_cast<double>(tiles["mod"]);
-            double noise_y_t = y / TILE_SIZE * static_cast<double>(tiles["mod"]);
+        // número aleatório para reger o mundo
+        double noise_x_b = x / TILE_SIZE * static_cast<double>(biome["mod"]);
+        double noise_y_b = y / TILE_SIZE * static_cast<double>(biome["mod"]);
 
-            double voronoi = voronoi_noise.GetNoise(noise_x_b, noise_y_b);
-            double perlin = perlin_noise.GetNoise(noise_x_t, noise_y_t);
+        double noise_x_t = x / TILE_SIZE * static_cast<double>(tiles["mod"]);
+        double noise_y_t = y / TILE_SIZE * static_cast<double>(tiles["mod"]);
 
-            voronoi = map(voronoi, -1, 1, 0, 1);
-            perlin = map(perlin, -1, 1, 0, 1);
+        double voronoi = voronoi_noise.GetNoise(noise_x_b, noise_y_b);
+        double perlin = perlin_noise.GetNoise(noise_x_t, noise_y_t);
 
-            // descobrindo qual bioma foi selecionado para o esquema
-            int biome_selected = 0;
-            double b_factor = 1;
+        voronoi = map(voronoi, -1, 1, 0, 1);
+        perlin = map(perlin, -1, 1, 0, 1);
 
-            for (int i = 0; i < biomes_list.size(); ++i) {
-                if (biomes[i].factor >= voronoi && biomes[i].factor <= b_factor) {
-                    b_factor = biomes[i].factor;
-                    biome_selected = i;
-                }
+        // descobrindo qual bioma foi selecionado para o esquema
+        int biome_selected = 0;
+        double b_factor = 1;
+
+        for (int i = 0; i < biomes_list.size(); ++i) {
+            if (biomes[i].factor >= voronoi && biomes[i].factor <= b_factor) {
+                b_factor = biomes[i].factor;
+                biome_selected = i;
             }
-
-            // nome do bioma selecionado
-            std::string biome_name = biomes[biome_selected].name;
-
-            // descobrindo o bloco que será gerado
-
-            // alocando os tipos de tiles do bioma
-            json tile_list = biome_config[biome_name]["tiles"];
-            TileInfo tiles[tile_list.size()];
-
-            for (int t = 0; t < tile_list.size(); ++t) {
-                std::string name = tile_list[t];
-                double factor = biome_config[biome_name][name]["factor"];
-                json variations = biome_config[biome_name][name]["variations"];
-
-                // alocando informações sobre o tile
-                tiles[t] = TileInfo {name, factor, variations};
-            }
-
-
-            // descobrindo qual tile foi selecionado para o esquema
-            int tile_selected = 0;
-            double t_factor = 1;
-
-            for (int i = 0; i < tile_list.size(); ++i) {
-                if (tiles[i].factor >= perlin && tiles[i].factor <= t_factor) {
-                    t_factor = tiles[i].factor;
-                    tile_selected = i;
-                }
-            }
-
-            // computando variação de blocos
-            
-            int n_variations = tiles[tile_selected].variations.size();
-            int variation_selected = trunc(perlin * n_variations) - 1;
-
-            // proteção
-            if (variation_selected < 0) {
-                variation_selected = 0;
-            }
-
-            // alocando o tile na memória
-            std::shared_ptr<Tile> m_tile = std::make_shared<Tile>(tiles[tile_selected].name, biomes[biome_selected].name, tiles[tile_selected].variations[variation_selected], x, y, TILE_SIZE + 2);
-
-            _tiles[id++] = m_tile;
         }
+
+        // nome do bioma selecionado
+        std::string biome_name = biomes[biome_selected].name;
+
+        // descobrindo o bloco que será gerado
+
+        // alocando os tipos de tiles do bioma
+        json tile_list = biome_config[biome_name]["tiles"];
+        TileInfo tiles[tile_list.size()];
+
+        for (int t = 0; t < tile_list.size(); ++t) {
+            std::string name = tile_list[t];
+            double factor = biome_config[biome_name][name]["factor"];
+            json variations = biome_config[biome_name][name]["variations"];
+
+            // alocando informações sobre o tile
+            tiles[t] = TileInfo {name, factor, variations};
+        }
+
+
+        // descobrindo qual tile foi selecionado para o esquema
+        int tile_selected = 0;
+        double t_factor = 1;
+
+        for (int i = 0; i < tile_list.size(); ++i) {
+            if (tiles[i].factor >= perlin && tiles[i].factor <= t_factor) {
+                t_factor = tiles[i].factor;
+                tile_selected = i;
+            }
+        }
+
+        // computando variação de blocos
+            
+        int n_variations = tiles[tile_selected].variations.size();
+        int variation_selected = trunc(perlin * n_variations) - 1;
+
+        // proteção
+        if (variation_selected < 0) {
+            variation_selected = 0;
+        }
+
+        // alocando o tile na memória
+        std::shared_ptr<Tile> m_tile = std::make_shared<Tile>(tiles[tile_selected].name, biomes[biome_selected].name, tiles[tile_selected].variations[variation_selected], x, y, TILE_SIZE + 2);
+
+        _tiles[id] = m_tile;
     }
 }
 

@@ -14,11 +14,14 @@
 
 #include "config/sdl2/graphics/window.hpp"
 
-#include "utils/world/handle-mobs.hpp"
+#include "utils/world/handle-mobs.hpp" // retirar dps
+#include "utils/world/handle-plants.hpp" // retirar dps
 #include "utils/world/camera.hpp"
+#include "utils/world/world-positions.hpp"
 
 #include "world/entity/mobs/mobs.hpp"
 #include "world/gen/terrain.hpp"
+#include "world/gen/flora.hpp"
 
 using json = nlohmann::json;
 
@@ -29,8 +32,8 @@ void app::ApplicationConfigure(void) {
     config = json::parse(config_file);
 
     // demais configurações
-    perlin_noise = FastNoiseLite(time(0));
-    voronoi_noise = FastNoiseLite(time(0));
+    perlin_noise = FastNoiseLite(2000);
+    voronoi_noise = FastNoiseLite(2000);
 
     perlin_noise.SetNoiseType(FastNoiseLite::NoiseType_OpenSimplex2S);
     voronoi_noise.SetNoiseType(FastNoiseLite::NoiseType_Cellular);
@@ -41,13 +44,20 @@ void app::ApplicationConfigure(void) {
     // world inicialization
     camera = std::make_shared<Camera>(0, 0);
 
+    // setando valores do mundo previamente
+    tiles.fill(nullptr);
+    plants.fill(nullptr);
+
     // pré-geração de mundo
-    generateTerrain(window, camera, tiles); // terreno
+    auto worldPositionsRef = calculateWorldPosition(window, camera);
+
+    generateTerrain(window, camera, worldPositionsRef, tiles); // terreno
+    generateFlora(window, camera, worldPositionsRef, plants, tiles);
+
+    delete[] worldPositionsRef.worldPositions;
 
     // colocando todos os objetos de mob_list para nullptr
     mob_list.fill(nullptr);
-
-    spawnNewMob<Wolf>(mob_list, 0, 0);
 }
 
 void app::ApplicationQuit(void) {
@@ -64,22 +74,45 @@ void app::update(int deltatime) {
     // atualizando definições de controle
     camera->updateCameraPosition(mouse);
 
+    // obtendo dados dinâmicos
+    double dist_horiz, dist_vert; // distância de renderização
+    camera->getRenderDistance(window, dist_horiz, dist_vert);
+
     // geração de terreno
     static int gen_count = 0;
     gen_count += deltatime;
 
-    // gera novo terreno a cada 0,3 s
+    // gera o mundo a cada 0,3 s
     if (gen_count > 300) {
-        generateTerrain(window, camera, tiles);
+
+        auto worldPositionsRef = calculateWorldPosition(window, camera);
+
+        generateTerrain(window, camera, worldPositionsRef, tiles); // terreno
+        generateFlora(window, camera, worldPositionsRef, plants, tiles); // flora
+
+        delete[] worldPositionsRef.worldPositions;
+
         gen_count = 0;
     }
 
     // atualizando todos os mobs
-    for (auto mob : mob_list) {
-        if (mob == nullptr) {
+    for (int i = 0; i < mob_list.size(); ++i) {
+        if (mob_list[i] == nullptr) {
             break;
         }
-        mob->update(deltatime);
+
+        // eliminando mobs que estão fora do alcance de renderização
+        if (mob_list[i]->x > camera->x + dist_horiz / 2 || mob_list[i]->x < camera->x - dist_horiz / 2) {
+            mob_list[i] = nullptr;
+            continue;
+        }
+
+        if (mob_list[i]->y > camera->y + dist_vert / 2 || mob_list[i]->y < camera->y - dist_vert / 2) {
+            mob_list[i] = nullptr;
+            continue;
+        }
+
+        mob_list[i]->update(deltatime);
     }
 }
 
@@ -91,6 +124,7 @@ void app::render(void) {
 
     // renderizando terreno
     renderTerrain(render_data, camera, tiles);
+    renderFlora(render_data, camera, plants);
 
     // renderizando todos os mobs
     for (auto mob : mob_list) {

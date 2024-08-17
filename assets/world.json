@@ -5,10 +5,11 @@
         "forest": {
             "factor": 1.0,
             "tiles": ["grass", "dirt", "stone"],
+            "plants": ["tree", "brown_tree1", "brown_tree2", "green_tree1", "green_tree2", "brush_1", "brush_2", "brush_3", "brush_5"],
 
             "grass": {
                 "factor": 1.0,
-                "variations": [1, 2, 3]
+                "variations": [1, 1, 1, 2, 2, 3, 3]
             },
             "dirt": {
                 "factor": 0.3,
@@ -16,25 +17,28 @@
             },
             "stone": {
                 "factor": 0.1,
-                "variations": [1, 2, 3]
+                "variations": [1, 2, 2, 3]
             }
         },
         "desert": {
-            "factor": 0.35,
+            "factor": 0.2,
             "tiles": ["sand", "stone"],
+            "plants": [],
 
-            "sand": {"factor": 1.0, "variations": [1, 1, 1, 2, 2]},
-            "stone": {"factor": 0.15, "variations": [1, 2, 3, 4]}
+            "sand": {"factor": 1.0, "variations": [1, 2, 2]},
+            "stone": {"factor": 0.15, "variations": [1, 1, 2, 2, 3, 3, 4, 4]}
         },
         "ocean": {
             "factor": 0.6,
             "tiles": ["water"],
+            "plants": [],
 
             "water": {"factor": 1.0, "variations": [1]}
         },
         "rock-valey": {
-            "factor": 0.1,
+            "factor": 0.05,
             "tiles": ["stone"],
+            "plants": [],
 
             "stone": {"factor": 1.0, "variations": [2, 3, 4]}
         }
