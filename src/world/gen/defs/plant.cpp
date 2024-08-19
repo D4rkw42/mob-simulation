@@ -29,6 +29,8 @@ Plant::Plant(std::string type, int x, int y) : type(type), x(x), y(y) {
     this->width = config["width"];
     this->height = config["height"];
 
+    this->hitbox = Hitbox {x, y, this->width, this->height};
+
     this->scale = config["scale"];
 }
 

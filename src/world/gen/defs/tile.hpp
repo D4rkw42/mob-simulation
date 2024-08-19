@@ -11,6 +11,8 @@
 
 #include "config/sdl2/graphics/window.hpp"
 #include "config/sdl2/graphics/image.hpp"
+
+#include "utils/math/math.hpp"
 #include "utils/world/camera.hpp"
 
 // definições
@@ -23,6 +25,7 @@ class Tile {
         int variation;
 
         int x, y, width;
+        Hitbox hitbox;
 
         Tile(std::string name, std::string biome, int variation, int x, int y, int width);
 

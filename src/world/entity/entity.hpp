@@ -12,6 +12,7 @@
 
 #include "config/sdl2/graphics/window.hpp"
 
+#include "utils/math/math.hpp"
 #include "utils/render/animation.hpp"
 #include "utils/world/camera.hpp"
 
@@ -35,6 +36,7 @@ extern const char* ENTITY_SPRITE_PATH; // sprites
 class Entity {
     public:
         double x, y, velX, velY;
+        Hitbox hitbox;
         
         Entity(ENTITY_TYPE type, EntityInfo info, int x, int y);
         virtual ~Entity() = default;
@@ -72,13 +74,20 @@ class Entity {
 
         // funções compartilhadas
 
-         /*
+        /*
          *
          * move muda altomaticamente a posição de uma entidade
          * essa função deve ser chamada dentro de Entity::update(...)
          * 
          */
-        void move(void); // move a entidade
+        void move(void);
+
+        /*
+         * updateHitbox atualiza os dados da hitbox automaticamente
+         * essa função deve ser chamada dentro de Entity::update(...) após Entity::move(...)
+         * 
+         */
+        void updateHitbox(void);
 
         /*
          *

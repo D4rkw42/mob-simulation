@@ -18,6 +18,9 @@ void Wolf::update(int deltatime) {
     // atualização de movimento
     move();
 
+    // atualizando dados da hitbox
+    updateHitbox();
+
     // ações conforme estado
 
     if (this->state == "idle") {

@@ -31,6 +31,8 @@ Entity::Entity(ENTITY_TYPE type, EntityInfo info, int x, int y) : type(type), st
     // salvando dados
     this->width = info["width"];
     this->height = info["height"];
+    
+    this->hitbox = Hitbox {0, 0, this->width, this->height};
 
     // animação é controlada pelo estado
     animation_info = info["animations"];
@@ -52,6 +54,13 @@ EntityInfo Entity::ReadEntityInfo(ENTITY_TYPE entity_type) {
 void Entity::move(void) {
     this->x += this->velX;
     this->y += this->velY;
+}
+
+void Entity::updateHitbox(void) {
+    this->hitbox.x = this->x;
+    this->hitbox.y = this->y;
+    this->hitbox.width = this->width;
+    this->hitbox.height = this->height;
 }
 
 void Entity::updateAnimations(void) {

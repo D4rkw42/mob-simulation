@@ -106,8 +106,6 @@ void generateFlora(std::shared_ptr<Window> window, std::shared_ptr<Camera> camer
 
 void renderFlora(RenderData render_data, std::shared_ptr<Camera> camera, std::array<std::shared_ptr<Plant>, MAX_HORIZONTAL_RENDERIZATION * MAX_VERTICAL_RENDERIZATION> plants) {
     for (auto plant : plants) {
-        //auto plant = *_plant;
-
         if (plant == nullptr) {
             continue;
         }

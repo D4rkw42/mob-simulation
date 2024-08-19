@@ -12,12 +12,15 @@
 #include "config/sdl2/graphics/window.hpp"
 
 #include "utils/world/camera.hpp"
+#include "utils/math/math.hpp"
 
 class Plant {
     public:
         std::string type;
 
         int x, y, width, height; // posição e tamanho
+        Hitbox hitbox;
+
         double scale; // escala de desenho
 
         // informações importantes

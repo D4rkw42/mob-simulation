@@ -5,3 +5,6 @@
 # files
 .dll
 .exe
+
+# specific dirs
+assets/images/world/flora/flora
