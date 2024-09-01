@@ -7,17 +7,14 @@
 #include "config/sdl2/graphics/window.hpp"
 #include "utils/world/camera.hpp"
 
+#include "world/world.hpp"
+
 //
 extern const int TILE_SIZE; // tamanho real de cada tile no mundo
 extern const int MAX_WORLD_POSITIONS; // quantidade máxima de entidades geradas no terreno do mundo
 
-// guarda uma posição no mundo
-struct WorldPosition {
-    int x, y;
-};
-
 struct WorldPositionsRef {
-    WorldPosition* worldPositions;
+    WorldCoord* worldPositions;
     int maxIDGenerated;
 };
 

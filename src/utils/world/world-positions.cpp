@@ -12,7 +12,7 @@ const int MAX_WORLD_POSITIONS = MAX_HORIZONTAL_RENDERIZATION * MAX_VERTICAL_REND
 
 WorldPositionsRef calculateWorldPosition(std::shared_ptr<Window> window, std::shared_ptr<Camera> camera) {
     WorldPositionsRef worldPositionsRef;
-    worldPositionsRef.worldPositions = new WorldPosition[MAX_WORLD_POSITIONS];
+    worldPositionsRef.worldPositions = new WorldCoord[MAX_WORLD_POSITIONS];
 
     double dist_horiz, dist_vert;
     camera->getRenderDistance(window, dist_horiz, dist_vert);
@@ -53,7 +53,7 @@ WorldPositionsRef calculateWorldPosition(std::shared_ptr<Window> window, std::sh
     // obtendo cada posição
     for (int x = start_x; x < final_x; x += TILE_SIZE) {
         for (int y = start_y; y < final_y; y += TILE_SIZE) {
-            worldPositionsRef.worldPositions[id++] = WorldPosition {x, y}; // guardando as posições numa lista
+            worldPositionsRef.worldPositions[id++] = WorldCoord {x, y}; // guardando as posições numa lista
         }
     }
 
