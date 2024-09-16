@@ -11,7 +11,8 @@
 #include <exception>
 
 #include "global.hpp"
-#include "utils/math/math.hpp"
+
+#include "utils/math/math-basics.hpp"
 
 using json = nlohmann::json;
 using Noise = FastNoiseLite;
@@ -31,7 +32,7 @@ struct TileInfo {
     json variations;
 };
 
-void generateTerrain(std::shared_ptr<Window> window, std::shared_ptr<Camera> camera, WorldPositionsRef worldPosRef, std::array<std::shared_ptr<Tile>, MAX_HORIZONTAL_RENDERIZATION * MAX_VERTICAL_RENDERIZATION>& _tiles) {
+void generateTerrain(std::shared_ptr<Window> window, std::shared_ptr<Camera> camera, WorldPositionsRef worldPosRef, TileList& _tiles) {
     // configurações da aplicação
     json biome = config["world"]["gen"]["biome"];
     json tiles = config["world"]["gen"]["tile"];
@@ -157,7 +158,7 @@ void generateTerrain(std::shared_ptr<Window> window, std::shared_ptr<Camera> cam
     }
 }
 
-void renderTerrain(RenderData render_data, std::shared_ptr<Camera> camera, std::array<std::shared_ptr<Tile>, MAX_HORIZONTAL_RENDERIZATION * MAX_VERTICAL_RENDERIZATION> tiles) {
+void renderTerrain(RenderData render_data, std::shared_ptr<Camera> camera, TileList tiles) {
     for (auto tile : tiles) {
         if (tile == nullptr) {
             break;

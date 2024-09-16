@@ -10,14 +10,16 @@
 #include <nlohmann/json.hpp>
 
 #include "global.hpp"
-#include "utils/math/math.hpp"
+
+#include "utils/math/math-basics.hpp"
+
 
 using Noise = FastNoiseLite;
 using json = nlohmann::json;
 
 //
 
-void generateFlora(std::shared_ptr<Window> window, std::shared_ptr<Camera> camera, WorldPositionsRef worldPosRef, std::array<std::shared_ptr<Plant>, MAX_HORIZONTAL_RENDERIZATION * MAX_VERTICAL_RENDERIZATION>& _plants, std::array<std::shared_ptr<Tile>, MAX_HORIZONTAL_RENDERIZATION * MAX_VERTICAL_RENDERIZATION> tiles) {
+void generateFlora(std::shared_ptr<Window> window, std::shared_ptr<Camera> camera, WorldPositionsRef worldPosRef, PlantList& _plants, TileList tiles) {
     // configuração das opções de ruído
     std::ifstream config_file("assets/config.json");
     json config = json::parse(config_file)["world"]["gen"]["plant"];
@@ -104,7 +106,7 @@ void generateFlora(std::shared_ptr<Window> window, std::shared_ptr<Camera> camer
     }
 }
 
-void renderFlora(RenderData render_data, std::shared_ptr<Camera> camera, std::array<std::shared_ptr<Plant>, MAX_HORIZONTAL_RENDERIZATION * MAX_VERTICAL_RENDERIZATION> plants) {
+void renderFlora(RenderData render_data, std::shared_ptr<Camera> camera, PlantList plants) {
     for (auto plant : plants) {
         if (plant == nullptr) {
             continue;

@@ -7,14 +7,19 @@
 #include <unordered_map>
 #include <memory>
 #include <string>
+#include <array>
 
 #include <nlohmann/json.hpp>
 
+#include "config/config.hpp"
 #include "config/sdl2/graphics/window.hpp"
 
-#include "utils/math/math.hpp"
+#include "utils/math/collision.hpp"
 #include "utils/render/animation.hpp"
 #include "utils/world/camera.hpp"
+
+// pré-definição
+class Entity;
 
 // info para as informações carregadas
 typedef nlohmann::json EntityInfo;
@@ -31,6 +36,8 @@ struct EntityData {
 // localização dos dados de uma entidade
 extern const char* ENTITY_CONFIG_FILE; // dados básicos
 extern const char* ENTITY_SPRITE_PATH; // sprites
+
+typedef std::array<std::shared_ptr<Entity>, MAX_MOBS_SPAWNED> MobList;
 
 // classe básica para entidades
 class Entity {

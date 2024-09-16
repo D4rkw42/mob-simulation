@@ -20,7 +20,7 @@ struct WorldCoord {
 
 // agrupando os principais conjuntos de dados do mundo
 struct World {
-    std::array<std::shared_ptr<Tile>, MAX_HORIZONTAL_RENDERIZATION * MAX_VERTICAL_RENDERIZATION> tiles;
-    std::array<std::shared_ptr<Plant>, MAX_HORIZONTAL_RENDERIZATION * MAX_VERTICAL_RENDERIZATION> plants;
-    std::array<std::shared_ptr<Entity>, MAX_MOBS_SPAWNED> mob_list; // lista de mobs
+    TileList tiles;
+    PlantList plants;
+    MobList mob_list; // lista de mobs
 };

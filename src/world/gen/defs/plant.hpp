@@ -8,11 +8,17 @@
 #include <string>
 #include <array>
 
+#include "config/config.hpp"
 #include "config/sdl2/graphics/image.hpp"
 #include "config/sdl2/graphics/window.hpp"
 
 #include "utils/world/camera.hpp"
-#include "utils/math/math.hpp"
+#include "utils/math/collision.hpp"
+
+// pré-definição
+class Plant;
+
+typedef std::array<std::shared_ptr<Plant>, MAX_HORIZONTAL_RENDERIZATION * MAX_VERTICAL_RENDERIZATION> PlantList;
 
 class Plant {
     public:

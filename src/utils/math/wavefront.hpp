@@ -6,10 +6,11 @@
 
 #include <cmath>
 #include <vector>
+#include <string>
 
 #include "world/world.hpp"
 
-#include "utils/math/math.hpp"
+#include "math-basics.hpp"
 
 const int MAX_WAVE_DISTANCE = 100; // dist
 const int WAVE_STEP = 5; // px
@@ -27,6 +28,11 @@ struct Node {
     int x, y; // apenas em relação a grid
     int dist;
 };
+
+// configuração
+
+// tiles inválidos
+std::vector<std::string> invalidTiles = {"water"};
 
 // criação dinâmica de nodes
 inline Node createNode(int x, int y, int dist = 0) {
@@ -69,15 +75,24 @@ inline std::vector<std::vector<Node>> createWaveFrontGrid(World world, WorldCoor
         m_nodes[id_x].resize(WAVE_DIST * 2 + 1); // resizing for y
 
         for (int y = -WAVE_DIST; y <= WAVE_DIST; ++y) {
-            m_nodes[id_x][id_y] = createNode(destiny.x + x * WAVE_STEP, destiny.y + y * WAVE_STEP);
+            int node_x = destiny.x + x * WAVE_STEP;
+            int node_y = destiny.y + y * WAVE_STEP;
+
+            m_nodes[id_x][id_y] = createNode(node_x, node_y);
             m_nodes[id_x][id_y].x = id_x;
             m_nodes[id_x][id_y].y = id_y;
 
             // verificando validade do node
 
             // colisão com plantas
+            
 
             // blocos inválidos
+            auto tile = findTile(world.tiles, node_x, node_y);
+
+            if (!tile || std::find(invalidTiles.begin(), invalidTiles.end(), tile->name) == invalidTiles.end()) {
+                m_nodes[id_x][id_y].dist = -1;
+            }
 
             id_y++;
         }

@@ -14,8 +14,6 @@
 
 #include "config/sdl2/graphics/window.hpp"
 
-#include "utils/world/handle-mobs.hpp" // retirar dps
-#include "utils/world/handle-plants.hpp" // retirar dps
 #include "utils/world/camera.hpp"
 #include "utils/world/world-positions.hpp"
 
@@ -45,19 +43,19 @@ void app::ApplicationConfigure(void) {
     camera = std::make_shared<Camera>(0, 0);
 
     // setando valores do mundo previamente
-    tiles.fill(nullptr);
-    plants.fill(nullptr);
+    world.tiles.fill(nullptr);
+    world.plants.fill(nullptr);
 
     // pré-geração de mundo
     auto worldPositionsRef = calculateWorldPosition(window, camera);
 
-    generateTerrain(window, camera, worldPositionsRef, tiles); // terreno
-    generateFlora(window, camera, worldPositionsRef, plants, tiles);
+    generateTerrain(window, camera, worldPositionsRef, world.tiles); // terreno
+    generateFlora(window, camera, worldPositionsRef, world.plants, world.tiles);
 
     delete[] worldPositionsRef.worldPositions;
 
-    // colocando todos os objetos de mob_list para nullptr
-    mob_list.fill(nullptr);
+    // colocando todos os objetos de world.mob_list para nullptr
+    world.mob_list.fill(nullptr);
 }
 
 void app::ApplicationQuit(void) {
@@ -65,8 +63,8 @@ void app::ApplicationQuit(void) {
     imageCollection.clear();
 
     // deleting world vars
-    tiles.fill(nullptr);
-    mob_list.fill(nullptr);
+    world.tiles.fill(nullptr);
+    world.mob_list.fill(nullptr);
 }
 
 // funcionamento geral da aplicação
@@ -87,8 +85,8 @@ void app::update(int deltatime) {
 
         auto worldPositionsRef = calculateWorldPosition(window, camera);
 
-        generateTerrain(window, camera, worldPositionsRef, tiles); // terreno
-        generateFlora(window, camera, worldPositionsRef, plants, tiles); // flora
+        generateTerrain(window, camera, worldPositionsRef, world.tiles); // terreno
+        generateFlora(window, camera, worldPositionsRef, world.plants, world.tiles); // flora
 
         delete[] worldPositionsRef.worldPositions;
 
@@ -96,23 +94,23 @@ void app::update(int deltatime) {
     }
 
     // atualizando todos os mobs
-    for (int i = 0; i < mob_list.size(); ++i) {
-        if (mob_list[i] == nullptr) {
+    for (int i = 0; i < world.mob_list.size(); ++i) {
+        if (world.mob_list[i] == nullptr) {
             break;
         }
 
         // eliminando mobs que estão fora do alcance de renderização
-        if (mob_list[i]->x > camera->x + dist_horiz / 2 || mob_list[i]->x < camera->x - dist_horiz / 2) {
-            mob_list[i] = nullptr;
+        if (world.mob_list[i]->x > camera->x + dist_horiz / 2 || world.mob_list[i]->x < camera->x - dist_horiz / 2) {
+            world.mob_list[i] = nullptr;
             continue;
         }
 
-        if (mob_list[i]->y > camera->y + dist_vert / 2 || mob_list[i]->y < camera->y - dist_vert / 2) {
-            mob_list[i] = nullptr;
+        if (world.mob_list[i]->y > camera->y + dist_vert / 2 || world.mob_list[i]->y < camera->y - dist_vert / 2) {
+            world.mob_list[i] = nullptr;
             continue;
         }
 
-        mob_list[i]->update(deltatime);
+        world.mob_list[i]->update(deltatime);
     }
 }
 
@@ -123,11 +121,11 @@ void app::render(void) {
     RenderData render_data {window, imageCollection};
 
     // renderizando terreno
-    renderTerrain(render_data, camera, tiles);
-    renderFlora(render_data, camera, plants);
+    renderTerrain(render_data, camera, world.tiles);
+    renderFlora(render_data, camera, world.plants);
 
     // renderizando todos os mobs
-    for (auto mob : mob_list) {
+    for (auto mob : world.mob_list) {
         if (mob == nullptr) {
             break;
         }

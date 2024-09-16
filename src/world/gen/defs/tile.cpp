@@ -39,3 +39,13 @@ void Tile::render(RenderData render_data, std::shared_ptr<Camera> camera) {
 
     SDL_Image::render(render_data, this->name, &img_data);
 }
+
+std::shared_ptr<Tile> findTile(TileList tiles, int x, int y) {
+    for (auto tile : tiles) {
+        if (x >= tile->x - tile->width / 2 && x <= tile->x + tile->width / 2 && y >= tile->y - tile->width / 2 && y <= tile->y + tile->width / 2) {
+            return tile;
+        }
+    }
+
+    return nullptr;
+}
