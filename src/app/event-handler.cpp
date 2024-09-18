@@ -6,6 +6,12 @@
 
 #include "global.hpp"
 
+// para desenvolvimento -- remover depois
+
+#include <iostream>
+#include <vector>
+#include "utils/world/wavefront.hpp"
+
 // eventos separador por tipo
 
 void eventMouseClick(SDL_Event event) {
@@ -27,6 +33,18 @@ void eventMouseClick(SDL_Event event) {
             mouse.left.hold_y = mouse.y;
         }
     }
+
+    // mudando destino da entidade
+    std::cout << "Changing..." << "\n";
+
+    if (world.mob_list[0] != nullptr) {
+        std::cout << world.mob_list[0]->x << "\n";
+    }
+
+    auto destiny = wavefront(world, WorldCoord {0, 0}, WorldCoord {100, 100}, world.mob_list[0]->hitbox);
+
+    std::cout << "Teste" << "\n";
+    world.mob_list[0]->changeDestiny(destiny);
 }
 
 void eventMouseMove(SDL_Event event) {

@@ -27,4 +27,8 @@ Mouse mouse = {
 // world variables
 std::shared_ptr<Camera> camera;
 
-World world; // representação do mundo
+World world = World { // representação do mundo
+    TileList { },
+    PlantList { },
+    MobList { }
+};

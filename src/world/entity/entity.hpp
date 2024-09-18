@@ -8,6 +8,7 @@
 #include <memory>
 #include <string>
 #include <array>
+#include <vector>
 
 #include <nlohmann/json.hpp>
 
@@ -15,6 +16,7 @@
 #include "config/sdl2/graphics/window.hpp"
 
 #include "utils/math/collision.hpp"
+#include "utils/math/math-basics.hpp"
 #include "utils/render/animation.hpp"
 #include "utils/world/camera.hpp"
 
@@ -42,9 +44,14 @@ typedef std::array<std::shared_ptr<Entity>, MAX_MOBS_SPAWNED> MobList;
 // classe básica para entidades
 class Entity {
     public:
-        double x, y, velX, velY;
+        double x, y, vel, velX, velY;
         Hitbox hitbox;
         
+        std::vector<WorldCoord> path; // destino que a entidade está seguindo
+        int currPathPositition;
+
+        bool isValid; // marca de uma entidade é válida ou não. Caso não seja, o sistema a apaga
+
         Entity(ENTITY_TYPE type, EntityInfo info, int x, int y);
         virtual ~Entity() = default;
 
@@ -57,6 +64,9 @@ class Entity {
         virtual void render(RenderData render_data, std::shared_ptr<Camera> camera);
 
         void invalidate(void); // torna a entidade inválida
+
+        // muda o destino da entidade
+        void changeDestiny(std::vector<WorldCoord> path);
 
         // funções compartilhadas que mudam o estado
         void idle(void); // o estado da entidade se torna "idle"
@@ -73,8 +83,6 @@ class Entity {
         std::string state; // estado da entidade
         std::string _last_state; // estado anterior
 
-        bool isValid; // marca de uma entidade é válida ou não. Caso não seja, o sistema a apaga
-
         int width, height;
 
         nlohmann::json animation_info; // dados para animação
@@ -90,6 +98,14 @@ class Entity {
         void move(void);
 
         /*
+         *
+         * persegue automaticamente o destino descrito em path
+         * a função é chamada dentro de entidades derivadas da classe principal
+         * 
+         */
+        void followDestiny(void);
+
+        /*
          * updateHitbox atualiza os dados da hitbox automaticamente
          * essa função deve ser chamada dentro de Entity::update(...) após Entity::move(...)
          * 
@@ -99,7 +115,7 @@ class Entity {
         /*
          *
          * updateAnimations atualiza automaticamente as definições de animação
-         * essa função deve ser chamada dentro de Entity::render(...) como primeira chamada
+         * essa função deve ser chamada dentro de Entity::update(...) como primeira chamada
          * 
          */
         void updateAnimations(void);

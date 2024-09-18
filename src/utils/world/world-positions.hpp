@@ -7,7 +7,7 @@
 #include "config/sdl2/graphics/window.hpp"
 #include "utils/world/camera.hpp"
 
-#include "world/world.hpp"
+#include "utils/math/math-basics.hpp"
 
 //
 extern const int TILE_SIZE; // tamanho real de cada tile no mundo

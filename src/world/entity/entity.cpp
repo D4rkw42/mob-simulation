@@ -7,6 +7,9 @@
 #include <fstream>
 #include <iostream>
 
+#include "utils/world/wavefront.hpp"
+#include "utils/world/world-positions.hpp"
+
 using json = nlohmann::json;
 
 // localização dos dados de uma entidade
@@ -19,7 +22,7 @@ std::unordered_map<ENTITY_TYPE, std::string> ENTITY_TYPE_LIST = {
 };
 
 // classe básica para entidades
-Entity::Entity(ENTITY_TYPE type, EntityInfo info, int x, int y) : type(type), state("idle"), x(x), y(y), velX(0), velY(0), isValid(true) {
+Entity::Entity(ENTITY_TYPE type, EntityInfo info, int x, int y) : type(type), state("idle"), x(x), y(y), vel(0), velX(0), velY(0), isValid(true) {
     for (auto field : info["data"]) {
         std::string field_name = field[0]; // o nome da informação a ser guardada
         EntityData entity_data = {field[1], std::string(field[2])}; // valor da informação + seu tipo
@@ -33,6 +36,9 @@ Entity::Entity(ENTITY_TYPE type, EntityInfo info, int x, int y) : type(type), st
     this->height = info["height"];
     
     this->hitbox = Hitbox {0, 0, this->width, this->height};
+
+    this->path = std::vector<WorldCoord> { };
+    this->currPathPositition = 0;
 
     // animação é controlada pelo estado
     animation_info = info["animations"];
@@ -56,7 +62,33 @@ void Entity::move(void) {
     this->y += this->velY;
 }
 
-void Entity::updateHitbox(void) {
+void Entity::followDestiny(void) {
+    if (this->currPathPositition < this->path.size()) {
+        // apenas passa para a próxima posição caso já esteja no destino
+        if (distance(this->x, this->y, x, y) <= (TILE_SIZE / 2) * 0.5f) {
+            this->currPathPositition++;
+        }
+
+        // seleciona a velocidade para alcançar o destino
+        int pathID = this->currPathPositition;
+
+        int x = this->path[pathID].x;
+        int y = this->path[pathID].y;
+
+        double angle = getAngleBetween(this->x, this->y, x, y);
+
+        this->velX = this->vel * cos(angle);
+        this->velY = this->vel * sin(angle);
+    }
+}
+
+void Entity::changeDestiny(std::vector<WorldCoord> path) {
+    this->path = path;
+    this->currPathPositition = 0;
+}
+
+void Entity::updateHitbox(void)
+{
     this->hitbox.x = this->x;
     this->hitbox.y = this->y;
     this->hitbox.width = this->width;

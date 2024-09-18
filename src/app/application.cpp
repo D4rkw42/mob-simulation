@@ -21,6 +21,9 @@
 #include "world/gen/terrain.hpp"
 #include "world/gen/flora.hpp"
 
+// apenas para desenvolvimento -- remover depois
+#include "utils/world/handle-mobs.hpp"
+
 using json = nlohmann::json;
 
 // configurações iniciais e quit
@@ -56,6 +59,10 @@ void app::ApplicationConfigure(void) {
 
     // colocando todos os objetos de world.mob_list para nullptr
     world.mob_list.fill(nullptr);
+
+    // apenas para desenvolvimento -- remover depois
+
+    spawnNewMob<Wolf>(world.mob_list, 0, 0);
 }
 
 void app::ApplicationQuit(void) {
@@ -129,6 +136,7 @@ void app::render(void) {
         if (mob == nullptr) {
             break;
         }
+
         mob->render(render_data, camera);
     }
 

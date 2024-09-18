@@ -22,7 +22,7 @@ def run_command(*args): # executa o aplicativo
 
 def makefile_gen_command(*args): # gera o makefile (para arquivos novos)
     print("[Tools.py] Gerando Makefile com CMake...")
-    os.system("cmake . -B build")
+    os.system("cmake . -G \"MinGW Makefiles\" -B build")
 
 def build_command(*args): # faz a build do aplicativo
     print(f"[Tools.py] Gerando {application}...")

@@ -36,3 +36,5 @@ class Plant {
 
         void render(RenderData render_data, std::shared_ptr<Camera> camera);
 };
+
+std::shared_ptr<Plant> findPlant(PlantList plants, int x, int y);

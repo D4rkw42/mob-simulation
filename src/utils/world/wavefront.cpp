@@ -1,41 +1,21 @@
 /*
-    Definições do algoritmo wavefront
+    Definições da função wavefront
 */
 
-#pragma once
-
-#include <cmath>
-#include <vector>
-#include <string>
-
-#include "world/world.hpp"
-
-#include "math-basics.hpp"
-
-const int MAX_WAVE_DISTANCE = 100; // dist
-const int WAVE_STEP = 5; // px
-
-/*
- * estrutura básica de dados para calcular o wavefront
- *
- * dist = 0 -> node válido
- * dist = -1 -> node inválido
- * dist > 0 -> node já calculado
- * 
- */
-struct Node {
-    WorldCoord coord;
-    int x, y; // apenas em relação a grid
-    int dist;
-};
-
-// configuração
+#include "wavefront.hpp"
 
 // tiles inválidos
 std::vector<std::string> invalidTiles = {"water"};
 
+/*
+    Definições do algoritmo wavefront
+*/
+
+const int MAX_WAVE_DISTANCE = 100; // dist
+const int WAVE_STEP = 5; // px
+
 // criação dinâmica de nodes
-inline Node createNode(int x, int y, int dist = 0) {
+Node createNode(int x, int y, int dist) {
     Node m_node;
 
     m_node.coord = WorldCoord {x, y};
@@ -45,13 +25,13 @@ inline Node createNode(int x, int y, int dist = 0) {
 }
 
 // criar uma grid de nodes para o wavefront
-inline std::vector<std::vector<Node>> createWaveFrontGrid(World world, WorldCoord origin, WorldCoord destiny, Hitbox hitbox) { // hitbox serve para verificar se ponto que irá se mover tem espaço
+std::vector<std::vector<Node>> createWaveFrontGrid(World world, WorldCoord origin, WorldCoord destiny, Hitbox hitbox) { // hitbox serve para verificar se ponto que irá se mover tem espaço
     int dist_x = abs(origin.x - destiny.y);
     int dist_y = abs(origin.y - destiny.y);
 
     int dist = (dist_x > dist_y)? dist_x : dist_y;
 
-    std::vector<std::vector<Node>> m_nodes;
+    std::vector<std::vector<Node>> m_nodes { };
 
     // distancia escolhida para a grid
     const int WAVE_DIST = dist / WAVE_STEP;
@@ -69,12 +49,18 @@ inline std::vector<std::vector<Node>> createWaveFrontGrid(World world, WorldCoor
     // criando a grid
     int id_x = 0, id_y = 0; // aux id's
 
+    std::cout << "Start Resizing" << "\n";
+
     m_nodes.resize(WAVE_DIST * 2 + 1); // resizing for x
 
-    for (int x = -WAVE_DIST; x <= WAVE_DIST; ++x) {
+    std::cout << "Resize 1" << "\n";
+
+    for (int x = -WAVE_DIST; x < WAVE_DIST; ++x) {
         m_nodes[id_x].resize(WAVE_DIST * 2 + 1); // resizing for y
 
-        for (int y = -WAVE_DIST; y <= WAVE_DIST; ++y) {
+        std::cout << "Resize 2" << "\n";
+
+        for (int y = -WAVE_DIST; y < WAVE_DIST; ++y) {
             int node_x = destiny.x + x * WAVE_STEP;
             int node_y = destiny.y + y * WAVE_STEP;
 
@@ -85,13 +71,21 @@ inline std::vector<std::vector<Node>> createWaveFrontGrid(World world, WorldCoor
             // verificando validade do node
 
             // colisão com plantas
-            
+            auto plant = findPlant(world.plants, node_x, node_y);
+
+            if (plant != nullptr) {
+                if (isColliding(hitbox, plant->hitbox)) {
+                    m_nodes[id_x][id_y].dist = -1;
+                }
+            }
 
             // blocos inválidos
             auto tile = findTile(world.tiles, node_x, node_y);
 
-            if (!tile || std::find(invalidTiles.begin(), invalidTiles.end(), tile->name) == invalidTiles.end()) {
-                m_nodes[id_x][id_y].dist = -1;
+            if (tile != nullptr) {
+                if (std::find(invalidTiles.begin(), invalidTiles.end(), tile->name) == invalidTiles.end()) {
+                    m_nodes[id_x][id_y].dist = -1;
+                }
             }
 
             id_y++;
@@ -104,7 +98,9 @@ inline std::vector<std::vector<Node>> createWaveFrontGrid(World world, WorldCoor
     return m_nodes;
 }
 
-inline std::vector<WorldCoord> wavefront(World world, WorldCoord origin, WorldCoord destiny, Hitbox hitbox) {
+std::vector<WorldCoord> wavefront(World world, WorldCoord origin, WorldCoord destiny, Hitbox hitbox) {
+    std::cout << "Executando wavefront" << "\n";
+    
     auto m_nodes = createWaveFrontGrid(world, origin, destiny, hitbox);
     std::vector<WorldCoord> coords; // coordenadas para chegar ao destino
 
@@ -112,6 +108,8 @@ inline std::vector<WorldCoord> wavefront(World world, WorldCoord origin, WorldCo
     if (m_nodes.size() == 0) {
         return coords;
     }
+
+    std::cout << "Grid created" << "\n";
 
     std::vector<Node> discovered, new_discovered;
 

@@ -27,12 +27,12 @@ void Wolf::update(int deltatime) {
         this->velX = 0;
         this->velY = 0;
     } else if (this->state == "chasing") {
-        this->velX = -0.1;
+        followDestiny();
     }
 }
 
 void Wolf::render(RenderData render_data, std::shared_ptr<Camera> camera) {
-    // atualização de animações
+    // atualização de quadros
     updateAnimations();
     this->animation.render(render_data, camera, this->x, this->y);
 }

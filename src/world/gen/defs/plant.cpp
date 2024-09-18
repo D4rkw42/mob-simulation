@@ -66,3 +66,13 @@ void Plant::render(RenderData render_data, std::shared_ptr<Camera> camera) {
 
     SDL_Image::render(render_data, this->type, &img_data);
 }
+
+std::shared_ptr<Plant> findPlant(PlantList plants, int x, int y) {
+    for (auto plant : plants) {
+        if (x >= plant->x - plant->width / 2 && x <= plant->x + plant->width / 2 && y >= plant->y - plant->height / 2 && y <= plant->y + plant->height) {
+            return plant;
+        }
+    }
+
+    return nullptr;
+}

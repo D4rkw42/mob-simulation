@@ -13,11 +13,6 @@
 #include "world/gen/defs/plant.hpp"
 #include "world/entity/entity.hpp"
 
-// definição de posição
-struct WorldCoord {
-    int x, y;
-};
-
 // agrupando os principais conjuntos de dados do mundo
 struct World {
     TileList tiles;
